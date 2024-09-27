@@ -3,6 +3,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Constants from 'expo-constants';
 import Imagens from '../imgs/Imagens'
+import { Link } from 'expo-router'
 export default function Home() {
   return (
     <View style={styles.container}>
@@ -10,7 +11,7 @@ export default function Home() {
 
       <View style={styles.nav}>
         <TouchableOpacity onPress={() => console.log("home")}>
-          <Text style={styles.navItem}>Home</Text>
+          <Text style={styles.navItem}><Link href={"/Home"}>Home</Link></Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log("agendar")}>
           <Text style={styles.navItem}>Agendar</Text>
@@ -38,7 +39,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 0,
     backgroundColor: 'lightGrey',
   },
   nav: {
