@@ -4,8 +4,11 @@ import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import Constants from 'expo-constants';
 import Imagens from '../imgs/Imagens'
 import { Link } from 'expo-router'
+
 export default function Home() {
+
   return (
+
     <View style={styles.container}>
       <StatusBar style="light" translucent={true} />
 
@@ -14,7 +17,7 @@ export default function Home() {
           <Text style={styles.navItem}><Link href={"/Home"}>Home</Link></Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log("agendar")}>
-          <Text style={styles.navItem}>Agendar</Text>
+          <Text style={styles.navItem}><Link href={"/Agendar"}>Agendar</Link></Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log("agendados")}>
           <Text style={styles.navItem}>Agendados</Text>
@@ -29,7 +32,7 @@ export default function Home() {
         </Text>
 
         <TouchableOpacity style={styles.button} onPress={() => console.log("agendar agora")}>
-          <Text style={styles.buttonText}>Agendar </Text>
+          <Text style={styles.buttonText}><Link href={"/Agendar"}>Agendar</Link> </Text>
         </TouchableOpacity>
       </View>
     </View>
