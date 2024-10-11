@@ -21,7 +21,7 @@ export default function Home() {
           <Text style={HomeCss.navItem}><Link href={"/Agendar"}>Agendar</Link></Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => console.log("agendados")}>
-          <Text style={HomeCss.navItem}>Agendados</Text>
+          <Text style={HomeCss.navItem}><Link href={'/Agendados'}>Agendados</Link></Text>
         </TouchableOpacity>
       </View>
 
