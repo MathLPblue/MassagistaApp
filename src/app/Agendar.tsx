@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useNavigation } from '@react-navigation/native'; // Navegação para voltar
+import AgendarCss from '../css/AgendarCss';
+
 
 export default function ScheduleScreen() {
   const [name, setName] = useState('');
@@ -60,20 +62,20 @@ export default function ScheduleScreen() {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Agende a sua massagem</Text>
+    <ScrollView contentContainerStyle={AgendarCss.container}>
+      <Text style={AgendarCss.title}>Agende a sua massagem</Text>
       
-      <Text style={styles.label}>Nome:</Text>
+      <Text style={AgendarCss.label}>Nome:</Text>
       <TextInput
-        style={styles.input}
+        style={AgendarCss.input}
         value={name}
         onChangeText={setName}
         placeholder="Digite seu nome"
       />
       
-      <Text style={styles.label}>Telefone:</Text>
+      <Text style={AgendarCss.label}>Telefone:</Text>
       <TextInput
-        style={styles.input}
+        style={AgendarCss.input}
         value={phone}
         onChangeText={setPhone}
         keyboardType="phone-pad"
@@ -93,7 +95,7 @@ export default function ScheduleScreen() {
         onCancel={() => setShowDatePicker(false)}
       />
 
-      <Text style={styles.dateText}>
+      <Text style={AgendarCss.dateText}>
         Data e Hora escolhidas: {date.toLocaleString()}
       </Text>
 
@@ -104,48 +106,10 @@ export default function ScheduleScreen() {
       />
 
       {/* Botão Voltar */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Text style={styles.backButtonText}>Voltar</Text>
+      <TouchableOpacity style={AgendarCss.backButton} onPress={() => navigation.goBack()}>
+        <Text style={AgendarCss.backButtonText}>Voltar</Text>
       </TouchableOpacity>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    flexGrow: 1,
-    justifyContent: 'center', // Certifica-se de que o conteúdo esteja centralizado
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-    fontWeight: 'bold',
-  },
-  label: {
-    marginBottom: 8,
-    fontSize: 16,
-  },
-  input: {
-    borderBottomWidth: 1,
-    marginBottom: 16,
-    paddingVertical: 4,
-    fontSize: 16,
-  },
-  dateText: {
-    marginVertical: 16,
-    fontSize: 16,
-  },
-  backButton: {
-    backgroundColor: 'pink', // Define a cor rosa para o botão
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center', // Centraliza o texto dentro do botão
-    marginTop: 20,
-    alignSelf: 'center', // Centraliza o botão na horizontal
-  },
-  backButtonText: {
-    color: 'white',
-    fontSize: 18,
-  },
-});
