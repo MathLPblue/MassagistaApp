@@ -22,7 +22,7 @@ const app = initializeApp(firebaseConfig);
 const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, handleAuthentication }) => {
   return (
     <View style={styles.authContainer}>
-       <Text style={styles.title}>{isLogin ? 'Sign In' : 'Sign Up'}</Text>
+       <Text style={styles.title}>{isLogin ? 'Fazer Login' : 'Criar conta'}</Text>
 
        <TextInput
         style={styles.input}
@@ -35,7 +35,7 @@ const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogi
         style={styles.input}
         value={password}
         onChangeText={setPassword}
-        placeholder="Password"
+        placeholder="Senha"
         secureTextEntry
       />
       <View style={styles.buttonContainer}>
@@ -44,7 +44,7 @@ const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogi
 
       <View style={styles.bottomContainer}>
         <Text style={styles.toggleText} onPress={() => setIsLogin(!isLogin)}>
-          {isLogin ? 'Need an account? Sign Up' : 'Already have an account? Sign In'}
+          {isLogin ? 'Precisa de uma conta? Sign Up' : 'Já tem uma conta? Sign In'}
         </Text>
       </View>
     </View>
@@ -77,22 +77,22 @@ export default App = () => {
     try {
       if (user) {
         // If user is already authenticated, log out
-        console.log('User logged out successfully!');
+        console.log('Usuário deslogou com sucesso!');
         await signOut(auth);
       } else {
         // Sign in or sign up
         if (isLogin) {
           // Sign in
           await signInWithEmailAndPassword(auth, email, password);
-          console.log('User signed in successfully!');
+          console.log('Usuário logou com sucesso!');
         } else {
           // Sign up
           await createUserWithEmailAndPassword(auth, email, password);
-          console.log('User created successfully!');
+          console.log('Usuário criado com sucesso!');
         }
       }
     } catch (error) {
-      console.error('Authentication error:', error.message);
+      console.error('Erro de autenticação', error.message);
     }
   };
 
