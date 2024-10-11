@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import {Image, View, Text, TextInput, Button, ScrollView } from 'react-native';
 import { initializeApp } from '@firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
 import Home from './Home'
+import AutenticarCss from '../css/Autenticar'
+import Imagens from '../imgs/Imagens'
 
 
 // Your web app's Firebase configuration
@@ -21,29 +23,36 @@ const app = initializeApp(firebaseConfig);
 
 const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, handleAuthentication }) => {
   return (
-    <View style={styles.authContainer}>
-       <Text style={styles.title}>{isLogin ? 'Fazer Login' : 'Criar conta'}</Text>
+    <View style={AutenticarCss.authContainer}>
+      <View style={AutenticarCss.ImgContainer}>
+        <Image source={Imagens.image1} style={AutenticarCss.logo}/>
+      </View>
+       <Text style={AutenticarCss.title}>{isLogin ? 'Fazer Login' : 'Criar conta'}</Text>
 
        <TextInput
-        style={styles.input}
+        style={AutenticarCss.input}
         value={email}
         onChangeText={setEmail}
         placeholder="Email"
         autoCapitalize="none"
       />
       <TextInput
-        style={styles.input}
+        style={AutenticarCss.input}
         value={password}
         onChangeText={setPassword}
         placeholder="Senha"
         secureTextEntry
       />
-      <View style={styles.buttonContainer}>
-        <Button title={isLogin ? 'Sign In' : 'Sign Up'} onPress={handleAuthentication} color="#3498db" />
+      <View style={AutenticarCss.buttonContainer}>
+        <Button title={isLogin ? 'Entrar' : 'Cadastre-se'} onPress={handleAuthentication} color="#F2B3CA" />
+        {/* 
+        #3498db cor antiga do btn entrar
+        
+        */}
       </View>
 
-      <View style={styles.bottomContainer}>
-        <Text style={styles.toggleText} onPress={() => setIsLogin(!isLogin)}>
+      <View style={AutenticarCss.bottomContainer}>
+        <Text style={AutenticarCss.toggleText} onPress={() => setIsLogin(!isLogin)}>
           {isLogin ? 'Precisa de uma conta? Sign Up' : 'Já tem uma conta? Sign In'}
         </Text>
       </View>
@@ -97,7 +106,7 @@ export default App = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={AutenticarCss.container}>
       {user ? (
         // Show user's email if user is authenticated
         <AuthenticatedScreen user={user} handleAuthentication={handleAuthentication} />
@@ -116,48 +125,3 @@ export default App = () => {
     </ScrollView>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-    backgroundColor: '#f0f0f0',
-  },
-  authContainer: {
-    width: '80%',
-    maxWidth: 400,
-    backgroundColor: '#fff',
-    padding: 16,
-    borderRadius: 8,
-    elevation: 3,
-  },
-  title: {
-    fontSize: 24,
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  input: {
-    height: 40,
-    borderColor: '#ddd',
-    borderWidth: 1,
-    marginBottom: 16,
-    padding: 8,
-    borderRadius: 4,
-  },
-  buttonContainer: {
-    marginBottom: 16,
-  },
-  toggleText: {
-    color: '#3498db',
-    textAlign: 'center',
-  },
-  bottomContainer: {
-    marginTop: 20,
-  },
-  emailText: {
-    fontSize: 18,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-});
