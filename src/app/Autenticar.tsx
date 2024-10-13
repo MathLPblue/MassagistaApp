@@ -5,6 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 import Home from './Home'
 import AutenticarCss from '../css/Autenticar'
 import Imagens from '../imgs/Imagens'
+import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold} from '@expo-google-fonts/ubuntu'
 
 
 // Your web app's Firebase configuration
@@ -47,6 +48,7 @@ const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogi
         <Button title={isLogin ? 'Entrar' : 'Cadastre-se'} onPress={handleAuthentication} color="#F2B3CA" />
         {/* 
         #3498db cor antiga do btn entrar
+        
         
         */}
       </View>
@@ -104,7 +106,13 @@ export default App = () => {
       console.error('Erro de autenticação', error.message);
     }
   };
-
+  const [fontLoaded] = useFonts({
+    Ubuntu_400Regular,
+    Ubuntu_700Bold,
+  });
+  if (!fontLoaded) {
+    return null;
+  }
   return (
     <ScrollView contentContainerStyle={AutenticarCss.container}>
       {user ? (

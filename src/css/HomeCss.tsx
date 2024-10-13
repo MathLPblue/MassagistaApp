@@ -16,6 +16,7 @@ const HomeCss = StyleSheet.create({
       flex: 1,
       padding: 0,
       backgroundColor: 'lightGrey',
+      fontFamily:'Ubuntu_700Bold'
     },
     nav: {
       flexDirection: 'row',
@@ -30,6 +31,7 @@ const HomeCss = StyleSheet.create({
       color: 'white',
       fontSize: 18,
       fontWeight: '600',
+      fontFamily:'Ubuntu_700Bold'
     },
     section: {
       flex: 1,
@@ -38,10 +40,12 @@ const HomeCss = StyleSheet.create({
     },
     title: {
       fontSize: 28,
-      fontWeight: 'bold',
+      
       color: '#001e3a',
       marginBottom: 10,
       textAlign: 'center',
+      fontFamily:'Ubuntu_700Bold'
+      
     },
     subtitle: {
       fontSize: 18,
@@ -49,6 +53,7 @@ const HomeCss = StyleSheet.create({
       marginBottom: 20,
       textAlign: 'center',
       paddingHorizontal: 20,
+      fontFamily:'Ubuntu_400Regular'
     },
     button: {
       backgroundColor: 'green',
@@ -60,6 +65,7 @@ const HomeCss = StyleSheet.create({
       color: 'white',
       fontSize: 18,
       fontWeight: '600',
+      fontFamily:'Ubuntu_700Bold'
     },
     Img:{
       width: 300, 

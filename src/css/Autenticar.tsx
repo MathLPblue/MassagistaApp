@@ -20,6 +20,7 @@ const AutenticarCss = StyleSheet.create({
       fontSize: 24,
       marginBottom: 16,
       textAlign: 'center',
+      fontFamily: 'Ubuntu_700Bold'
     },
     input: {
       height: 40,
@@ -28,13 +29,17 @@ const AutenticarCss = StyleSheet.create({
       marginBottom: 16,
       padding: 8,
       borderRadius: 4,
+      fontFamily: 'Ubuntu_400Regular'
     },
     buttonContainer: {
       marginBottom: 16,
+      fontFamily: 'Ubuntu_700Bold'
+      
     },
     toggleText: {
       color: '#F2B3CA', // cor antiga #3498db
       textAlign: 'center',
+      fontFamily: 'Ubuntu_700Bold'
     },
     bottomContainer: {
       marginTop: 20,
@@ -43,6 +48,7 @@ const AutenticarCss = StyleSheet.create({
       fontSize: 18,
       textAlign: 'center',
       marginBottom: 20,
+      fontFamily: 'Ubuntu_400Regular'
     },
     logo:{
       width: 120, 

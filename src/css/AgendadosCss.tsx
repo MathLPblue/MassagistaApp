@@ -6,6 +6,7 @@ const AgendadosCss = StyleSheet.create ({
         flex: 1,
         padding: 0,
         backgroundColor: 'lightGrey',
+        
       },
       nav: {
         flexDirection: 'row',
@@ -19,37 +20,18 @@ const AgendadosCss = StyleSheet.create ({
       navItem: {
         color: 'white',
         fontSize: 18,
-        fontWeight: '600',
+        fontFamily:'Ubuntu_700Bold'
       },
       section: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
       },
-      title: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: '#001e3a',
-        marginBottom: 10,
-        textAlign: 'center',
-      },
-      subtitle: {
-        fontSize: 18,
-        color: '#515151',
-        marginBottom: 20,
-        textAlign: 'center',
-        paddingHorizontal: 20,
-      },
       button: {
         backgroundColor: 'green',
         paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 25,
-      },
-      buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: '600',
       },
       agendamentoItem: {
         padding: 15,
@@ -62,7 +44,49 @@ const AgendadosCss = StyleSheet.create ({
       itemTexto: {
         fontSize: 18,
         marginBottom: 5,
+        fontFamily:'Ubuntu_400Regular'
       },
+      btnConfirma: {
+        backgroundColor: '#33afff', 
+        padding: 15,
+        borderRadius: 10,
+        alignItems: 'center',
+        marginTop: -15,
+        width: '35%', 
+        alignSelf: 'flex-end', 
+      },
+      btnConfrimaDetalhes: {
+        color: '#fff',
+        fontSize: 16,
+        fontFamily:'Ubuntu_700Bold',
+      },
+      modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+      },
+      
+      modalConteudo: {
+        width: '90%',
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+      },
+      
+      modalTitulo: {
+        fontSize: 20,
+        fontFamily:'Ubuntu_700Bold',
+        marginBottom: 20,
+      },
+      
+      modalTexto: {
+        fontSize: 16,
+        marginBottom: 20,
+        fontFamily:'Ubuntu_400Regular',
+      },
+      
       
     
 })

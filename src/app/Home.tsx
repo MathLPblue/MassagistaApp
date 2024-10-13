@@ -4,9 +4,16 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import Imagens from '../imgs/Imagens'
 import { Link } from 'expo-router'
 import HomeCss from '../css/HomeCss';
-
+import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold} from '@expo-google-fonts/ubuntu'
 
 export default function Home() {
+  const [fontLoaded] = useFonts({
+    Ubuntu_400Regular,
+    Ubuntu_700Bold,
+  });
+  if (!fontLoaded) {
+    return null;
+  }
 
   return (
 

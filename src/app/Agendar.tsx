@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Image, ScrollView, Alert, TouchableOpacity, ImageBackground } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useNavigation } from '@react-navigation/native'; // Navegação para voltar
 import AgendarCss from '../css/AgendarCss';
-
+import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold} from '@expo-google-fonts/ubuntu'
+import Imagens from '../imgs/Imagens';
 
 export default function ScheduleScreen() {
   const [name, setName] = useState('');
@@ -60,11 +61,22 @@ export default function ScheduleScreen() {
       );
     }
   };
+  const [fontLoaded] = useFonts({
+    Ubuntu_400Regular,
+    Ubuntu_700Bold,
+  });
+  if (!fontLoaded) {
+    return null;
+  }
 
   return (
     <ScrollView contentContainerStyle={AgendarCss.container}>
-      <Text style={AgendarCss.title}>Agende a sua massagem</Text>
       
+      
+      <View style={AgendarCss.ContainerTitulo} >
+        
+      <Text style={AgendarCss.title}>Agende a sua massagem</Text>
+      </View>
       <Text style={AgendarCss.label}>Nome:</Text>
       <TextInput
         style={AgendarCss.input}
@@ -82,11 +94,11 @@ export default function ScheduleScreen() {
         placeholder="Digite seu telefone"
       />
 
-      <Button
-        title="Escolher Data e Hora"
-        onPress={() => setShowDatePicker(true)}
-        accessibilityLabel="Escolha a data e hora do agendamento"
-      />
+      <TouchableOpacity style={AgendarCss.btnDataHora} onPress = {() => setShowDatePicker(true)}>
+        <Text style={AgendarCss.btnConfrimaDetalhes}>
+          Escolha a data e hora da massagem
+        </Text>
+      </TouchableOpacity>
 
       <DateTimePickerModal
         isVisible={showDatePicker}
@@ -96,19 +108,19 @@ export default function ScheduleScreen() {
       />
 
       <Text style={AgendarCss.dateText}>
-        Data e Hora escolhidas: {date.toLocaleString()}
+        Data e Hora escolhidas: {"\n"} {date.toLocaleString()}
       </Text>
+      <TouchableOpacity style={AgendarCss.btnConfirma} onPress={handleSchedule}>
+        <Text style={AgendarCss.btnConfrimaDetalhes}>Confirmar Agendamento</Text>
+      </TouchableOpacity>
 
-      <Button
-        title="Confirmar Agendamento"
-        onPress={handleSchedule}
-        accessibilityLabel="Confirme seu agendamento"
-      />
+
 
       {/* Botão Voltar */}
       <TouchableOpacity style={AgendarCss.backButton} onPress={() => navigation.goBack()}>
-        <Text style={AgendarCss.backButtonText}>Voltar</Text>
+        <Text style={AgendarCss.btnConfrimaDetalhes}>Voltar</Text>
       </TouchableOpacity>
+      
     </ScrollView>
   );
 }
