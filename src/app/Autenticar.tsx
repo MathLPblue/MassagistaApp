@@ -1,36 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import {Image, View, Text, TextInput, Button, ScrollView } from 'react-native';
-import { initializeApp } from '@firebase/app';
+import { Image, View, Text, TextInput, Button, ScrollView } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
-import Home from './Home'
-import AutenticarCss from '../css/Autenticar'
-import Imagens from '../imgs/Imagens'
-import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold} from '@expo-google-fonts/ubuntu'
+import Home from './Home';
+import AutenticarCss from '../css/Autenticar';
+import Imagens from '../imgs/Imagens';
+import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
+import app from '../services/firebaseconfig';
 
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCwZ4sA-UKJFGFs71-s8OBFHMMoZKwSWvI",
-  authDomain: "massagem-do-marlon.firebaseapp.com",
-  projectId: "massagem-do-marlon",
-  storageBucket: "massagem-do-marlon.appspot.com",
-  messagingSenderId: "332265225627",
-  appId: "1:332265225627:web:1e5f5c012308e5ae26353e"
-};
+interface AuthScreenProps {
+  email: string;
+  setEmail: (email: string) => void;
+  password: string;
+  setPassword: (password: string) => void;
+  isLogin: boolean;
+  setIsLogin: (isLogin: boolean) => void;
+  handleAuthentication: () => Promise<void>;
+}
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-
-const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, handleAuthentication }) => {
+const AuthScreen: React.FC<AuthScreenProps> = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, handleAuthentication }) => {
   return (
     <View style={AutenticarCss.authContainer}>
       <View style={AutenticarCss.ImgContainer}>
-        <Image source={Imagens.image1} style={AutenticarCss.logo}/>
+        <Image source={Imagens.image1} style={AutenticarCss.logo} />
       </View>
-       <Text style={AutenticarCss.title}>{isLogin ? 'Fazer Login' : 'Criar conta'}</Text>
+      <Text style={AutenticarCss.title}>{isLogin ? 'Fazer Login' : 'Criar conta'}</Text>
 
-       <TextInput
+      <TextInput
         style={AutenticarCss.input}
         value={email}
         onChangeText={setEmail}
@@ -46,35 +42,29 @@ const AuthScreen = ({ email, setEmail, password, setPassword, isLogin, setIsLogi
       />
       <View style={AutenticarCss.buttonContainer}>
         <Button title={isLogin ? 'Entrar' : 'Cadastre-se'} onPress={handleAuthentication} color="#F2B3CA" />
-        {/* 
-        #3498db cor antiga do btn entrar
-        
-        
-        */}
       </View>
 
       <View style={AutenticarCss.bottomContainer}>
         <Text style={AutenticarCss.toggleText} onPress={() => setIsLogin(!isLogin)}>
-          {isLogin ? 'Precisa de uma conta? Sign Up' : 'Já tem uma conta? Sign In'}
+          {isLogin ? 'Precisa de uma conta? Cadastre-se' : 'Já tem uma conta? Entre'}
         </Text>
       </View>
     </View>
   );
-}
-
-
-const AuthenticatedScreen = ({ user, handleAuthentication }) => {
-  return (
-    <Home/>
-  );
 };
-export default App = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [user, setUser] = useState(null); // Track user authentication state
-  const [isLogin, setIsLogin] = useState(true);
+
+const AuthenticatedScreen: React.FC<{ user: any; handleAuthentication: () => Promise<void> }> = ({ user, handleAuthentication }) => {
+  return <Home />;
+};
+
+const App: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [user, setUser] = useState<any | null>(null); // Track user authentication state
+  const [isLogin, setIsLogin] = useState<boolean>(true);
 
   const auth = getAuth(app);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
@@ -83,7 +73,6 @@ export default App = () => {
     return () => unsubscribe();
   }, [auth]);
 
-  
   const handleAuthentication = async () => {
     try {
       if (user) {
@@ -103,23 +92,24 @@ export default App = () => {
         }
       }
     } catch (error) {
-      console.error('Erro de autenticação', error.message);
+      console.error('Erro de autenticação', error);
     }
   };
+
   const [fontLoaded] = useFonts({
     Ubuntu_400Regular,
     Ubuntu_700Bold,
   });
+
   if (!fontLoaded) {
     return null;
   }
+
   return (
     <ScrollView contentContainerStyle={AutenticarCss.container}>
       {user ? (
-        // Show user's email if user is authenticated
         <AuthenticatedScreen user={user} handleAuthentication={handleAuthentication} />
       ) : (
-        // Show sign-in or sign-up form if user is not authenticated
         <AuthScreen
           email={email}
           setEmail={setEmail}
@@ -132,4 +122,6 @@ export default App = () => {
       )}
     </ScrollView>
   );
-}
+};
+
+export default App;
