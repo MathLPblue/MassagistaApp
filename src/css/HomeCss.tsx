@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 
-/* 
+/*
 A logo do massagista possue uma paleta de cores diferente do aplicativo em geral
 
 #8C4660
@@ -25,7 +25,7 @@ const HomeCss = StyleSheet.create({
       backgroundColor: '#33afff',
       paddingVertical: 15,
       borderRadius: 10,
-      marginTop: Constants.statusBarHeight + 10, 
+      marginTop: Constants.statusBarHeight + 10,
     },
     navItem: {
       color: 'white',
@@ -40,12 +40,12 @@ const HomeCss = StyleSheet.create({
     },
     title: {
       fontSize: 28,
-      
+
       color: '#001e3a',
       marginBottom: 10,
       textAlign: 'center',
       fontFamily:'Ubuntu_700Bold'
-      
+
     },
     subtitle: {
       fontSize: 18,
@@ -61,6 +61,13 @@ const HomeCss = StyleSheet.create({
       paddingHorizontal: 40,
       borderRadius: 25,
     },
+    buttonLogout:{
+        backgroundColor: 'red',
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        borderRadius: 25,
+        margin:15
+    },
     buttonText: {
       color: 'white',
       fontSize: 18,
@@ -68,12 +75,12 @@ const HomeCss = StyleSheet.create({
       fontFamily:'Ubuntu_700Bold'
     },
     Img:{
-      width: 300, 
-      height: 300, 
-      marginBottom: 20, 
-      borderRadius: 40, 
-      
-  
+      width: 300,
+      height: 300,
+      marginBottom: 20,
+      borderRadius: 40,
+
+
     }
   });
 

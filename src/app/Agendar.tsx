@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, ScrollView, Alert, TouchableOpacity, ImageBackground } from 'react-native';
+import { View, Text, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { useNavigation } from '@react-navigation/native'; // Navegação para voltar
+import { useNavigation } from '@react-navigation/native';
 import AgendarCss from '../css/AgendarCss';
-import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold} from '@expo-google-fonts/ubuntu'
-import Imagens from '../imgs/Imagens';
+import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import app from '../services/firebaseconfig';
+
+const db = getFirestore(app);
 
 export default function ScheduleScreen() {
   const [name, setName] = useState('');
@@ -12,33 +15,25 @@ export default function ScheduleScreen() {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  const navigation = useNavigation(); // Usado para navegar de volta
+  const navigation = useNavigation();
 
   const onDateChange = (selectedDate: Date) => {
     setShowDatePicker(false);
-
-    if (selectedDate) {
-      // Verifica se a data/hora selecionada é válida
-      if (!isValidDate(selectedDate)) {
-        Alert.alert('Erro', 'Por favor, escolha uma data e hora entre 09:00 e 20:00.');
-        return;
-      }
+    if (selectedDate && isValidDate(selectedDate)) {
       setDate(selectedDate);
+    } else {
+      Alert.alert('Erro', 'Por favor, escolha uma data e hora entre 09:00 e 20:00.');
     }
   };
 
   const isValidDate = (selectedDate: Date) => {
     const now = new Date();
-
-    // Verifica se a data é no futuro
     if (selectedDate < now) {
       Alert.alert('Erro', 'A data e hora não podem ser no passado.');
       return false;
     }
-
-    // Verifica se a hora está entre 09:00 e 20:00
     const selectedHour = selectedDate.getHours();
-    return selectedHour >= 9 && selectedHour < 20; // 20:00 é 19:59 na validação
+    return selectedHour >= 9 && selectedHour < 20;
   };
 
   const validateFields = () => {
@@ -53,30 +48,42 @@ export default function ScheduleScreen() {
     return true;
   };
 
-  const handleSchedule = () => {
+  const handleSchedule = async () => {
     if (validateFields()) {
-      Alert.alert(
-        'Agendamento Confirmado',
-        `Agendado para: ${date.toLocaleString()}\nNome: ${name}\nTelefone: ${phone}`
-      );
+      try {
+        await addDoc(collection(db, 'agendamentos'), {
+          name,
+          phone,
+          date: date.toISOString(),
+          createdAt: new Date()
+        });
+
+        Alert.alert('Agendamento Confirmado', `Agendado para: ${date.toLocaleString()}\nNome: ${name}\nTelefone: ${phone}`);
+        setName('');
+        setPhone('');
+        setDate(new Date());
+      } catch (error) {
+        console.error('Erro ao agendar:', error);
+        Alert.alert('Erro', 'Houve um problema ao realizar o agendamento. Tente novamente.');
+      }
     }
   };
+
   const [fontLoaded] = useFonts({
     Ubuntu_400Regular,
     Ubuntu_700Bold,
   });
+
   if (!fontLoaded) {
     return null;
   }
 
   return (
     <ScrollView contentContainerStyle={AgendarCss.container}>
-      
-      
-      <View style={AgendarCss.ContainerTitulo} >
-        
-      <Text style={AgendarCss.title}>Agende a sua massagem</Text>
+      <View style={AgendarCss.ContainerTitulo}>
+        <Text style={AgendarCss.title}>Agende a sua massagem</Text>
       </View>
+
       <Text style={AgendarCss.label}>Nome:</Text>
       <TextInput
         style={AgendarCss.input}
@@ -84,7 +91,7 @@ export default function ScheduleScreen() {
         onChangeText={setName}
         placeholder="Digite seu nome"
       />
-      
+
       <Text style={AgendarCss.label}>Telefone:</Text>
       <TextInput
         style={AgendarCss.input}
@@ -94,10 +101,8 @@ export default function ScheduleScreen() {
         placeholder="Digite seu telefone"
       />
 
-      <TouchableOpacity style={AgendarCss.btnDataHora} onPress = {() => setShowDatePicker(true)}>
-        <Text style={AgendarCss.btnConfrimaDetalhes}>
-          Escolha a data e hora da massagem
-        </Text>
+      <TouchableOpacity style={AgendarCss.btnDataHora} onPress={() => setShowDatePicker(true)}>
+        <Text style={AgendarCss.btnConfrimaDetalhes}>Escolha a data e hora da massagem</Text>
       </TouchableOpacity>
 
       <DateTimePickerModal
@@ -107,21 +112,15 @@ export default function ScheduleScreen() {
         onCancel={() => setShowDatePicker(false)}
       />
 
-      <Text style={AgendarCss.dateText}>
-        Data e Hora escolhidas: {"\n"} {date.toLocaleString()}
-      </Text>
+      <Text style={AgendarCss.dateText}>Data e Hora escolhidas: {"\n"} {date.toLocaleString()}</Text>
+
       <TouchableOpacity style={AgendarCss.btnConfirma} onPress={handleSchedule}>
         <Text style={AgendarCss.btnConfrimaDetalhes}>Confirmar Agendamento</Text>
       </TouchableOpacity>
 
-
-
-      {/* Botão Voltar */}
       <TouchableOpacity style={AgendarCss.backButton} onPress={() => navigation.goBack()}>
         <Text style={AgendarCss.btnConfrimaDetalhes}>Voltar</Text>
       </TouchableOpacity>
-      
     </ScrollView>
   );
 }
-

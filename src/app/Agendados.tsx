@@ -1,35 +1,91 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Modal, Button, Linking } from 'react-native';
-import Imagens from '../imgs/Imagens';
+import { db } from '../services/firebaseconfig';
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { Link } from 'expo-router';
 import AgendadosCss from '../css/AgendadosCss';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
+import { Picker } from '@react-native-picker/picker';
+import { getAuth } from 'firebase/auth';
 
 
+export enum StatusAgendamento {
+  Pendente = 'Pendente',
+  Confirmado = 'Concluído',
+  Cancelado = 'Cancelado'
+}
 interface Agendamento {
   id: string;
   cliente: string;
   data: string;
   hora: string;
   celular: string;
+  status: StatusAgendamento;
 }
 
-const exemploAgendamento: Agendamento[] = [
-  { id: '1', cliente: 'Alexandre', data: '11/09/2001', hora: '15:15', celular: '123456' },
-  { id: '2', cliente: 'Elias', data: '22/10/2021', hora: '19:00', celular: '123456' },
-  { id: '3', cliente: 'Matheus', data: '20/07/2024', hora: '09:30', celular: '123456' },
-  { id: '4', cliente: 'TWINSEN', data: '13/10/2024', hora: '10:00', celular: '123456' }, // celular deve ser uma string
-];
 
 export default function Agendados() {
   const [fontLoaded] = useFonts({
     Ubuntu_400Regular,
     Ubuntu_700Bold,
   });
-  
+
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAgendamento, setSelectedAgendamento] = useState<Agendamento | null>(null);
+  const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
+  const [newStatus, setNewStatus] = useState<StatusAgendamento | null>(null);
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    const fetchAgendamentos = async () => {
+      try {
+        const agendamentosCollection = collection(db, 'agendamentos');
+        let agendamentosQuery = query(agendamentosCollection);
+
+        // Yup, essa gambiarra está horrível.
+        if (user) {
+          const userEmail = user.email;
+          const usersCollection = collection(db, 'users');
+          const usersQuery = query(usersCollection, where('email', '==', userEmail));
+          const usersSnapshot = await getDocs(usersQuery);
+          const userDoc = usersSnapshot.docs[0];
+
+          if (userDoc) {
+            const role = userDoc.data().role;
+
+            if (role === 'cliente') {
+
+              agendamentosQuery = query(agendamentosCollection, where('email', '==', userEmail));
+
+            } else if (role === 'massagista') {
+
+              agendamentosQuery = agendamentosCollection;
+
+            }
+          }
+        }
+
+
+        const agendamentosSnapshot = await getDocs(agendamentosQuery);
+        const agendamentosList = agendamentosSnapshot.docs.map(doc => ({
+          id: doc.id,
+          cliente: doc.data().cliente,
+          data: new Date(doc.data().date).toLocaleDateString(),
+          hora: new Date(doc.data().date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          celular: doc.data().phone,
+          status: doc.data().status as StatusAgendamento,
+        }));
+        setAgendamentos(agendamentosList);
+      } catch (error) {
+        console.error('Erro ao buscar agendamentos:', error);
+      }
+    };
+
+    fetchAgendamentos();
+
+  }, [user]);
 
   if (!fontLoaded) {
     return null;
@@ -45,11 +101,30 @@ export default function Agendados() {
     Linking.openURL(url).catch(err => console.error('Falha ao abrir o link:', err));
   };
 
+  const handleSaveStatus = async (id: string) => {
+    if (newStatus) {
+      try {
+        const agendamentoRef = doc(db, 'agendamentos', id);
+        await updateDoc(agendamentoRef, { status: newStatus });
+        setAgendamentos(prevAgendamentos =>
+          prevAgendamentos.map(agendamento =>
+            agendamento.id === id ? { ...agendamento, status: newStatus } : agendamento
+          )
+        );
+        setModalVisible(false);
+        setNewStatus(null);
+      } catch (error) {
+        console.error('Erro ao atualizar o status:', error);
+      }
+    }
+  };
+
   const AgendamentoItem = ({ item }: { item: Agendamento }) => (
     <View style={AgendadosCss.agendamentoItem}>
       <Text style={AgendadosCss.itemTexto}> Cliente: {item.cliente} </Text>
       <Text style={AgendadosCss.itemTexto}> Data: {item.data} </Text>
       <Text style={AgendadosCss.itemTexto}> Hora: {item.hora} </Text>
+      <Text style={AgendadosCss.itemTexto}> Status: {item.status} </Text>
       <TouchableOpacity style={AgendadosCss.btnConfirma} onPress={() => handleSchedule(item)}>
         <Text style={AgendadosCss.btnConfrimaDetalhes}>Detalhes</Text>
       </TouchableOpacity>
@@ -72,7 +147,11 @@ export default function Agendados() {
         </TouchableOpacity>
       </View>
 
-      <FlatList data={exemploAgendamento} renderItem={AgendamentoItem} keyExtractor={(item) => item.id} />
+      <FlatList
+        data={agendamentos}
+        renderItem={AgendamentoItem}
+        keyExtractor={(item) => item.id}
+      />
 
       <Modal
         animationType="slide"
@@ -91,7 +170,24 @@ export default function Agendados() {
                 <TouchableOpacity onPress={() => handleCallWhatsApp(selectedAgendamento.celular)}>
                   <Text style={AgendadosCss.modalTexto}>Celular: {selectedAgendamento.celular}</Text>
                 </TouchableOpacity>
-                <Button title="Fechar" onPress={() => setModalVisible(false)} />
+
+
+                <Text style={AgendadosCss.modalTexto}>Mudar Status:</Text>
+                <Picker selectedValue={newStatus || selectedAgendamento.status} style={AgendadosCss.Picker}
+                 onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}>
+
+                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Pendente" value={StatusAgendamento.Pendente} />
+                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Concluído" value={StatusAgendamento.Confirmado} />
+                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Cancelado" value={StatusAgendamento.Cancelado} />
+
+                </Picker>
+                <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => handleSaveStatus(selectedAgendamento.id)}>
+                  <Text style={AgendadosCss.btnStatusDetalhes}>Salvar Alterações</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => setModalVisible(false)}>
+                  <Text style={AgendadosCss.btnStatusDetalhes}>Fechar</Text>
+                </TouchableOpacity>
+
               </>
             )}
           </View>

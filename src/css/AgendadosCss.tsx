@@ -6,7 +6,7 @@ const AgendadosCss = StyleSheet.create ({
         flex: 1,
         padding: 0,
         backgroundColor: 'lightGrey',
-        
+
       },
       nav: {
         flexDirection: 'row',
@@ -15,7 +15,7 @@ const AgendadosCss = StyleSheet.create ({
         backgroundColor: '#33afff',
         paddingVertical: 15,
         borderRadius: 10,
-        marginTop: Constants.statusBarHeight + 10, 
+        marginTop: Constants.statusBarHeight + 10,
       },
       navItem: {
         color: 'white',
@@ -39,7 +39,7 @@ const AgendadosCss = StyleSheet.create ({
         borderWidth: 5,
         borderColor: '#ffd9d9',
         borderRadius: 8,
-        backgroundColor: '#ff7efb12' /* testando cores*/ 
+        backgroundColor: '#ff7efb12' /* testando cores*/
       },
       itemTexto: {
         fontSize: 18,
@@ -47,13 +47,27 @@ const AgendadosCss = StyleSheet.create ({
         fontFamily:'Ubuntu_400Regular'
       },
       btnConfirma: {
-        backgroundColor: '#33afff', 
+        backgroundColor: '#33afff',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
         marginTop: -15,
-        width: '35%', 
-        alignSelf: 'flex-end', 
+        width: '35%',
+        alignSelf: 'flex-end',
+      },
+      btnStatus:{
+        backgroundColor: '#33afff',
+        padding: 10,
+        borderRadius: 26,
+        alignItems: 'center',
+        marginTop: 5,
+        width: '55%',
+
+      },
+      btnStatusDetalhes:{
+        color: '#fff',
+        fontSize: 16,
+        fontFamily:'Ubuntu_700Bold',
       },
       btnConfrimaDetalhes: {
         color: '#fff',
@@ -64,9 +78,8 @@ const AgendadosCss = StyleSheet.create ({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
       },
-      
       modalConteudo: {
         width: '90%',
         backgroundColor: 'white',
@@ -74,21 +87,25 @@ const AgendadosCss = StyleSheet.create ({
         borderRadius: 10,
         alignItems: 'center',
       },
-      
       modalTitulo: {
         fontSize: 20,
         fontFamily:'Ubuntu_700Bold',
         marginBottom: 20,
       },
-      
       modalTexto: {
         fontSize: 16,
         marginBottom: 20,
         fontFamily:'Ubuntu_400Regular',
       },
-      
-      
-    
+      Picker:{
+        height: 50,
+        width: 200,
+        backgroundColor:'grey',
+      },
+      PickerTexto:{
+        fontFamily:'Ubuntu_400Regular',
+        fontSize:15
+      },
 })
 
 export default AgendadosCss

@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Image, View, Text, TextInput, Button, ScrollView } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
+import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import Home from './Home';
 import AutenticarCss from '../css/Autenticar';
 import Imagens from '../imgs/Imagens';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import app from '../services/firebaseconfig';
-
 
 interface AuthScreenProps {
   email: string;
@@ -15,7 +15,7 @@ interface AuthScreenProps {
   setPassword: (password: string) => void;
   isLogin: boolean;
   setIsLogin: (isLogin: boolean) => void;
-  handleAuthentication: () => Promise<void>;
+  handleAuthentication: () => void;
 }
 
 const AuthScreen: React.FC<AuthScreenProps> = ({ email, setEmail, password, setPassword, isLogin, setIsLogin, handleAuthentication }) => {
@@ -60,10 +60,13 @@ const AuthenticatedScreen: React.FC<{ user: any; handleAuthentication: () => Pro
 const App: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [user, setUser] = useState<any | null>(null); // Track user authentication state
+  const [user, setUser] = useState<any | null>(null);
   const [isLogin, setIsLogin] = useState<boolean>(true);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const auth = getAuth(app);
+  const db = getFirestore(app);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -75,6 +78,9 @@ const App: React.FC = () => {
 
   const handleAuthentication = async () => {
     try {
+      setLoading(true);
+      setErrorMessage(null);
+
       if (user) {
         // If user is already authenticated, log out
         console.log('Usuário deslogou com sucesso!');
@@ -86,13 +92,24 @@ const App: React.FC = () => {
           await signInWithEmailAndPassword(auth, email, password);
           console.log('Usuário logou com sucesso!');
         } else {
-          // Sign up
-          await createUserWithEmailAndPassword(auth, email, password);
+
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          const user = userCredential.user;
+
+          await setDoc(doc(db, 'users', user.uid), {
+            email: email,
+            role: 'cliente',
+            createdAt: new Date(),
+          });
+
           console.log('Usuário criado com sucesso!');
         }
       }
     } catch (error) {
+      setErrorMessage('Erro de autenticação. Verifique suas credenciais.');
       console.error('Erro de autenticação', error);
+    } finally {
+      setLoading(false);
     }
   };
 
