@@ -121,7 +121,7 @@ export default function Agendados() {
 
   const AgendamentoItem = ({ item }: { item: Agendamento }) => (
     <View style={AgendadosCss.agendamentoItem}>
-      <Text style={AgendadosCss.itemTexto}> Cliente: {item.cliente} </Text>
+      <Text style={AgendadosCss.itemTexto}> Nome: {item.cliente} </Text>
       <Text style={AgendadosCss.itemTexto}> Data: {item.data} </Text>
       <Text style={AgendadosCss.itemTexto}> Hora: {item.hora} </Text>
       <Text style={AgendadosCss.itemTexto}> Status: {item.status} </Text>
@@ -164,7 +164,7 @@ export default function Agendados() {
             {selectedAgendamento && (
               <>
                 <Text style={AgendadosCss.modalTitulo}>Detalhes do Agendamento</Text>
-                <Text style={AgendadosCss.modalTexto}>Cliente: {selectedAgendamento.cliente}</Text>
+                <Text style={AgendadosCss.modalTexto}>Nome: {selectedAgendamento.cliente}</Text>
                 <Text style={AgendadosCss.modalTexto}>Data: {selectedAgendamento.data}</Text>
                 <Text style={AgendadosCss.modalTexto}>Hora: {selectedAgendamento.hora}</Text>
                 <TouchableOpacity onPress={() => handleCallWhatsApp(selectedAgendamento.celular)}>

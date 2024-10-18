@@ -6,11 +6,13 @@ import AgendarCss from '../css/AgendarCss';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import app from '../services/firebaseconfig';
+import { getAuth } from 'firebase/auth';
 
 const db = getFirestore(app);
+const auth = getAuth(app);
 
 export default function ScheduleScreen() {
-  const [name, setName] = useState('');
+  const [cliente, setCliente] = useState('');
   const [phone, setPhone] = useState('');
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -28,16 +30,22 @@ export default function ScheduleScreen() {
 
   const isValidDate = (selectedDate: Date) => {
     const now = new Date();
+
     if (selectedDate < now) {
       Alert.alert('Erro', 'A data e hora não podem ser no passado.');
       return false;
     }
     const selectedHour = selectedDate.getHours();
-    return selectedHour >= 9 && selectedHour < 20;
+    
+    if(selectedHour < 9 || selectedHour >= 20){
+        Alert.alert('erro', "Por favor, escolha um horário entre 09:00 e 20:00");
+        return false;
+    }
+    return true;
   };
 
   const validateFields = () => {
-    if (!name.trim()) {
+    if (!cliente.trim()) {
       Alert.alert('Erro', 'Por favor, insira seu nome.');
       return false;
     }
@@ -45,21 +53,28 @@ export default function ScheduleScreen() {
       Alert.alert('Erro', 'Por favor, insira seu telefone.');
       return false;
     }
+
     return true;
   };
 
   const handleSchedule = async () => {
+
+    const user = auth.currentUser;
+    const userEmail = user.email;
+
     if (validateFields()) {
       try {
         await addDoc(collection(db, 'agendamentos'), {
-          name,
+          cliente,
           phone,
           date: date.toISOString(),
-          createdAt: new Date()
+          createdAt: new Date(),
+          email: userEmail,
+          status: 'Pendente'
         });
 
-        Alert.alert('Agendamento Confirmado', `Agendado para: ${date.toLocaleString()}\nNome: ${name}\nTelefone: ${phone}`);
-        setName('');
+        Alert.alert('Agendamento Confirmado', `Agendado para: ${date.toLocaleString()}\nNome: ${cliente}\nTelefone: ${phone}`);
+        setCliente('');
         setPhone('');
         setDate(new Date());
       } catch (error) {
@@ -87,8 +102,8 @@ export default function ScheduleScreen() {
       <Text style={AgendarCss.label}>Nome:</Text>
       <TextInput
         style={AgendarCss.input}
-        value={name}
-        onChangeText={setName}
+        value={cliente}
+        onChangeText={setCliente}
         placeholder="Digite seu nome"
       />
 
