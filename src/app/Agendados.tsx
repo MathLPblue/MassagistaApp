@@ -8,6 +8,7 @@ import AgendadosCss from '../css/AgendadosCss';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { Picker } from '@react-native-picker/picker';
 import { getAuth } from 'firebase/auth';
+import Filtro from '../components/filtro';
 
 
 export enum StatusAgendamento {
@@ -124,7 +125,11 @@ export default function Agendados() {
       <Text style={AgendadosCss.itemTexto}> Nome: {item.cliente} </Text>
       <Text style={AgendadosCss.itemTexto}> Data: {item.data} </Text>
       <Text style={AgendadosCss.itemTexto}> Hora: {item.hora} </Text>
+
+      {
+      /* removendo momentaneamente
       <Text style={AgendadosCss.itemTexto}> Status: {item.status} </Text>
+      */}
       <TouchableOpacity style={AgendadosCss.btnConfirma} onPress={() => handleSchedule(item)}>
         <Text style={AgendadosCss.btnConfrimaDetalhes}>Detalhes</Text>
       </TouchableOpacity>
@@ -146,6 +151,9 @@ export default function Agendados() {
           <Text style={AgendadosCss.navItem}><Link href={'/Agendados'}>Agendados</Link></Text>
         </TouchableOpacity>
       </View>
+
+      {/* Ainda não tem a lógica para filtrar os dias.*/}
+      <Filtro/>
 
       <FlatList
         data={agendamentos}

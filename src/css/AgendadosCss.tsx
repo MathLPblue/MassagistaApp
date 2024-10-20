@@ -34,12 +34,13 @@ const AgendadosCss = StyleSheet.create ({
         borderRadius: 25,
       },
       agendamentoItem: {
-        padding: 15,
+        padding: 5,
+        marginHorizontal: 10,
         marginVertical: 15,
-        borderWidth: 5,
-        borderColor: '#ffd9d9',
-        borderRadius: 8,
-        backgroundColor: '#ff7efb12' /* testando cores*/
+        borderWidth: 3,
+        borderColor: '#33adffce',
+        borderRadius: 18,
+        backgroundColor: '#61c0ff16' /* testando cores*/
       },
       itemTexto: {
         fontSize: 18,
@@ -49,10 +50,10 @@ const AgendadosCss = StyleSheet.create ({
       btnConfirma: {
         backgroundColor: '#33afff',
         padding: 15,
-        borderRadius: 10,
+        borderRadius: 15,
         alignItems: 'center',
         marginTop: -15,
-        width: '35%',
+        width: '30%',
         alignSelf: 'flex-end',
       },
       btnStatus:{
@@ -79,12 +80,13 @@ const AgendadosCss = StyleSheet.create ({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
+
       },
       modalConteudo: {
         width: '90%',
         backgroundColor: 'white',
         padding: 20,
-        borderRadius: 10,
+        borderRadius: 20,
         alignItems: 'center',
       },
       modalTitulo: {
