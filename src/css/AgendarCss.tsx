@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 
 const AgendarCss = StyleSheet.create({
   container: {
-    
     padding: 16,
     flexGrow: 1,
     justifyContent: 'center',
@@ -30,7 +29,8 @@ const AgendarCss = StyleSheet.create({
     marginBottom: 16,
     paddingVertical: 4,
     fontSize: 16,
-    fontFamily:'Ubuntu_400Regular'
+    fontFamily:'Ubuntu_400Regular',
+
   },
   dateText: {
     marginVertical: 16,
@@ -39,7 +39,7 @@ const AgendarCss = StyleSheet.create({
     fontFamily:'Ubuntu_700Bold',
     justifyContent:'center',
     textAlign:'center',
-    
+
   },
   backButton: {
     backgroundColor: 'pink', // Define a cor rosa para o botão
@@ -51,14 +51,14 @@ const AgendarCss = StyleSheet.create({
   },
 
   btnConfirma: {
-    backgroundColor: '#33afff', 
+    backgroundColor: '#33afff',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-    width: '65%', 
-    alignSelf: 'center', 
+    width: '65%',
+    alignSelf: 'center',
   },
   btnConfrimaDetalhes: {
     color: '#fff',
@@ -66,24 +66,24 @@ const AgendarCss = StyleSheet.create({
     fontFamily:'Ubuntu_700Bold',
   },
   btnDataHora:{
-    backgroundColor: '#33afff', 
+    backgroundColor: '#33afff',
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-    width: '90%', 
+    width: '90%',
     alignSelf: 'center',
 
   },
   Img:{
     opacity: 0.5,
-    width: 100, 
-    height: 100, 
-    marginBottom: 20, 
-    borderRadius: 40, 
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+    borderRadius: 40,
+  },
 
-  }
 });
 
 

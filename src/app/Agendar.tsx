@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, ScrollView, Alert, TouchableOpacity, ImageBackground } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useNavigation } from '@react-navigation/native';
 import AgendarCss from '../css/AgendarCss';
@@ -7,6 +7,7 @@ import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import app from '../services/firebaseconfig';
 import { getAuth } from 'firebase/auth';
+import Imagens from '../imgs/Imagens';
 
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -36,7 +37,7 @@ export default function ScheduleScreen() {
       return false;
     }
     const selectedHour = selectedDate.getHours();
-    
+
     if(selectedHour < 9 || selectedHour >= 20){
         Alert.alert('erro', "Por favor, escolha um horário entre 09:00 e 20:00");
         return false;
@@ -59,7 +60,7 @@ export default function ScheduleScreen() {
 
   const handleSchedule = async () => {
 
-    const user = auth.currentUser;
+    const user = auth.currentUser!;
     const userEmail = user.email;
 
     if (validateFields()) {
@@ -94,6 +95,9 @@ export default function ScheduleScreen() {
   }
 
   return (
+    //https://stackoverflow.com/questions/49399114/react-native-change-opacity-colour-of-imagebackground
+
+    <ImageBackground source={Imagens.backgroundImage} imageStyle = {{opacity:0.25}} style={AgendarCss.container}>
     <ScrollView contentContainerStyle={AgendarCss.container}>
       <View style={AgendarCss.ContainerTitulo}>
         <Text style={AgendarCss.title}>Agende a sua massagem</Text>
@@ -137,5 +141,6 @@ export default function ScheduleScreen() {
         <Text style={AgendarCss.btnConfrimaDetalhes}>Voltar</Text>
       </TouchableOpacity>
     </ScrollView>
+    </ImageBackground>
   );
 }
