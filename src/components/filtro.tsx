@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
 import moment from "moment";
 import 'moment/locale/pt-br';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
-
+import FiltroCss from "../css/FiltroCSS";
 // https://momentjs.com/
 // https://stackoverflow.com/questions/17493309/how-do-i-change-the-language-of-moment-js
 // https://momentjs.com/docs/#/query/
@@ -40,27 +40,27 @@ const Filtro = () => {
 
   if (!fontLoaded) {
     return (
-      <View style={styles.loadContainer}>
+      <View style={FiltroCss.loadContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
 
   return (
-    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.container}>
+    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={FiltroCss.container}>
       {days.map((day, index) => {
         const dayNumber = Number(day.split(',')[0]);
         return (
           <TouchableOpacity
             key={index}
             style={[
-              styles.CaixaDia,
-              DiaSelecionado === dayNumber ? styles.DiaSelecionado : styles.padraoDia,
+              FiltroCss.CaixaDia,
+              DiaSelecionado === dayNumber ? FiltroCss.DiaSelecionado : FiltroCss.padraoDia,
             ]}
             onPress={() => handlePress(day)}
           >
-            <Text style={DiaSelecionado === dayNumber ? styles.textoSelecionado : styles.text}>{day.split(',')[0]}</Text>
-            <Text style={DiaSelecionado === dayNumber ? styles.textoSelecionado : styles.text}>{day.split(',')[1]}</Text>
+            <Text style={DiaSelecionado === dayNumber ? FiltroCss.textoSelecionado : FiltroCss.text}>{day.split(',')[0]}</Text>
+            <Text style={DiaSelecionado === dayNumber ? FiltroCss.textoSelecionado : FiltroCss.text}>{day.split(',')[1]}</Text>
           </TouchableOpacity>
         );
       })}
@@ -68,45 +68,5 @@ const Filtro = () => {
   );
 };
 
-//Ainda vou seperar isso em outro arquivo
-
-const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 15,
-    paddingHorizontal: 5,
-    flexDirection: "row",
-    marginBottom: -150 //isso aqui tá ridiculo
-  },
-  CaixaDia: {
-    //Acho que o tamanho está okay.
-    width: 85,
-    height: 85,
-    justifyContent: "center",
-    alignItems: "center",
-    marginHorizontal: 5,
-    borderRadius: 15,
-  },
-  DiaSelecionado: {
-    backgroundColor: "#0087e0",
-  },
-  padraoDia: {
-    backgroundColor: "#61c0ff",
-  },
-  text: {
-    color: "black",
-    fontSize: 16,
-    fontFamily:'Ubuntu_700Bold'
-  },
-  textoSelecionado: {
-    color: "white",
-    fontSize: 22,
-    fontFamily:'Ubuntu_700Bold'
-  },
-  loadContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default Filtro;
