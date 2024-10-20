@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from "rea
 import moment from "moment";
 import 'moment/locale/pt-br';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
-import FiltroCss from "../css/FiltroCSS";
+import FiltroCss from "../css/FiltroCss";
 // https://momentjs.com/
 // https://stackoverflow.com/questions/17493309/how-do-i-change-the-language-of-moment-js
 // https://momentjs.com/docs/#/query/
