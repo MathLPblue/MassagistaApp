@@ -8,6 +8,7 @@ import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import app from '../services/firebaseconfig';
 import { getAuth } from 'firebase/auth';
 import Imagens from '../imgs/Imagens';
+import NavBar from '../components/NavBar';
 
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -98,6 +99,7 @@ export default function ScheduleScreen() {
     //https://stackoverflow.com/questions/49399114/react-native-change-opacity-colour-of-imagebackground
 
     <ImageBackground source={Imagens.backgroundImage} imageStyle = {{opacity:0.25}} style={AgendarCss.container}>
+    <NavBar/>
     <ScrollView contentContainerStyle={AgendarCss.container}>
       <View style={AgendarCss.ContainerTitulo}>
         <Text style={AgendarCss.title}>Agende a sua massagem</Text>

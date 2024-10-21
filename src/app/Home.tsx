@@ -6,6 +6,7 @@ import { Link, useRouter } from 'expo-router';
 import HomeCss from '../css/HomeCss';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { getAuth, signOut } from 'firebase/auth';
+import NavBar from '../components/NavBar';
 
 export default function Home() {
   const [fontLoaded] = useFonts({
@@ -33,18 +34,7 @@ export default function Home() {
   return (
     <View style={HomeCss.container}>
       <StatusBar style="light" translucent={true} />
-
-      <View style={HomeCss.nav}>
-        <TouchableOpacity onPress={() => console.log("home")}>
-          <Text style={HomeCss.navItem}><Link href={"/Home"}>Home</Link></Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("agendar")}>
-          <Text style={HomeCss.navItem}><Link href={"/Agendar"}>Agendar</Link></Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("agendados")}>
-          <Text style={HomeCss.navItem}><Link href={'/Agendados'}>Agendados</Link></Text>
-        </TouchableOpacity>
-      </View>
+      <NavBar/>
 
       <View style={HomeCss.section}>
         <Image source={Imagens.image1} style={HomeCss.Img}/>
@@ -58,7 +48,7 @@ export default function Home() {
         </TouchableOpacity>
 
         <TouchableOpacity style={HomeCss.buttonLogout} onPress={handleLogout}>
-          <Text style={HomeCss.buttonText}>Sair</Text>
+          <Text style={HomeCss.buttonText}>Encerrar sessão</Text>
         </TouchableOpacity>
       </View>
     </View>

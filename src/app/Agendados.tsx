@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Modal, Button, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Modal, Linking } from 'react-native';
 import { db } from '../services/firebaseconfig';
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { Link } from 'expo-router';
@@ -9,13 +9,14 @@ import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/
 import { Picker } from '@react-native-picker/picker';
 import { getAuth } from 'firebase/auth';
 import Filtro from '../components/filtro';
-
+import NavBar from '../components/NavBar';
 
 export enum StatusAgendamento {
   Pendente = 'Pendente',
   Confirmado = 'Concluído',
-  Cancelado = 'Cancelado'
+  Cancelado = 'Cancelado',
 }
+
 interface Agendamento {
   id: string;
   cliente: string;
@@ -24,7 +25,6 @@ interface Agendamento {
   celular: string;
   status: StatusAgendamento;
 }
-
 
 export default function Agendados() {
   const [fontLoaded] = useFonts({
@@ -35,6 +35,7 @@ export default function Agendados() {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAgendamento, setSelectedAgendamento] = useState<Agendamento | null>(null);
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
+  const [filtradoAgendamentos, setFiltradoAgendamentos] = useState<Agendamento[]>([]);
   const [newStatus, setNewStatus] = useState<StatusAgendamento | null>(null);
   const auth = getAuth();
   const user = auth.currentUser;
@@ -45,7 +46,6 @@ export default function Agendados() {
         const agendamentosCollection = collection(db, 'agendamentos');
         let agendamentosQuery = query(agendamentosCollection);
 
-        // Yup, essa gambiarra está horrível.
         if (user) {
           const userEmail = user.email;
           const usersCollection = collection(db, 'users');
@@ -55,19 +55,11 @@ export default function Agendados() {
 
           if (userDoc) {
             const role = userDoc.data().role;
-
             if (role === 'cliente') {
-
               agendamentosQuery = query(agendamentosCollection, where('email', '==', userEmail));
-
-            } else if (role === 'massagista') {
-
-              agendamentosQuery = agendamentosCollection;
-
             }
           }
         }
-
 
         const agendamentosSnapshot = await getDocs(agendamentosQuery);
         const agendamentosList = agendamentosSnapshot.docs.map(doc => ({
@@ -78,15 +70,21 @@ export default function Agendados() {
           celular: doc.data().phone,
           status: doc.data().status as StatusAgendamento,
         }));
+
         setAgendamentos(agendamentosList);
+        setFiltradoAgendamentos(agendamentosList);
       } catch (error) {
         console.error('Erro ao buscar agendamentos:', error);
       }
     };
 
     fetchAgendamentos();
-
   }, [user]);
+
+  const filterByDay = (day: string) => {
+    const filtrado = agendamentos.filter(agendamento => agendamento.data === day);
+    setFiltradoAgendamentos(filtrado);
+  };
 
   if (!fontLoaded) {
     return null;
@@ -122,14 +120,9 @@ export default function Agendados() {
 
   const AgendamentoItem = ({ item }: { item: Agendamento }) => (
     <View style={AgendadosCss.agendamentoItem}>
-      <Text style={AgendadosCss.itemTexto}> Nome: {item.cliente} </Text>
-      <Text style={AgendadosCss.itemTexto}> Data: {item.data} </Text>
-      <Text style={AgendadosCss.itemTexto}> Hora: {item.hora} </Text>
-
-      {
-      /* removendo momentaneamente
-      <Text style={AgendadosCss.itemTexto}> Status: {item.status} </Text>
-      */}
+      <Text style={AgendadosCss.itemTexto}>Nome: {item.cliente}</Text>
+      <Text style={AgendadosCss.itemTexto}>Data: {item.data}</Text>
+      <Text style={AgendadosCss.itemTexto}>Hora: {item.hora}</Text>
       <TouchableOpacity style={AgendadosCss.btnConfirma} onPress={() => handleSchedule(item)}>
         <Text style={AgendadosCss.btnConfrimaDetalhes}>Detalhes</Text>
       </TouchableOpacity>
@@ -140,25 +133,14 @@ export default function Agendados() {
     <View style={AgendadosCss.container}>
       <StatusBar style="light" translucent={true} />
 
-      <View style={AgendadosCss.nav}>
-        <TouchableOpacity onPress={() => console.log("home")}>
-          <Text style={AgendadosCss.navItem}><Link href={"/Home"}>Home</Link></Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("agendar")}>
-          <Text style={AgendadosCss.navItem}><Link href={"/Agendar"}>Agendar</Link></Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("agendados")}>
-          <Text style={AgendadosCss.navItem}><Link href={'/Agendados'}>Agendados</Link></Text>
-        </TouchableOpacity>
-      </View>
+      <NavBar/>
 
-      {/* Ainda não tem a lógica para filtrar os dias.*/}
-      <Filtro/>
+      <Filtro onSelectDay={filterByDay} />
 
       <FlatList
-        data={agendamentos}
+        data={filtradoAgendamentos}
         renderItem={AgendamentoItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
       />
 
       <Modal
@@ -179,23 +161,23 @@ export default function Agendados() {
                   <Text style={AgendadosCss.modalTexto}>Celular: {selectedAgendamento.celular}</Text>
                 </TouchableOpacity>
 
-
                 <Text style={AgendadosCss.modalTexto}>Mudar Status:</Text>
-                <Picker selectedValue={newStatus || selectedAgendamento.status} style={AgendadosCss.Picker}
-                 onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}>
-
-                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Pendente" value={StatusAgendamento.Pendente} />
-                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Concluído" value={StatusAgendamento.Confirmado} />
-                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Cancelado" value={StatusAgendamento.Cancelado} />
-
+                <Picker
+                  selectedValue={newStatus || selectedAgendamento.status}
+                  style={AgendadosCss.Picker}
+                  onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}
+                >
+                  <Picker.Item label="Pendente" value={StatusAgendamento.Pendente} />
+                  <Picker.Item label="Concluído" value={StatusAgendamento.Confirmado} />
+                  <Picker.Item label="Cancelado" value={StatusAgendamento.Cancelado} />
                 </Picker>
+
                 <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => handleSaveStatus(selectedAgendamento.id)}>
                   <Text style={AgendadosCss.btnStatusDetalhes}>Salvar Alterações</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => setModalVisible(false)}>
                   <Text style={AgendadosCss.btnStatusDetalhes}>Fechar</Text>
                 </TouchableOpacity>
-
               </>
             )}
           </View>

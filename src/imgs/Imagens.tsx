@@ -4,3 +4,5 @@ const Imagens = {
 }
 
 export default Imagens
+
+

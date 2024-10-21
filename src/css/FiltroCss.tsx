@@ -5,7 +5,6 @@ const FiltroCss = StyleSheet.create({
       paddingVertical: 15,
       paddingHorizontal: 5,
       flexDirection: "row",
-      marginBottom: -150 //isso aqui tá ridiculo
     },
     CaixaDia: {
       //Acho que o tamanho está okay.
@@ -37,6 +36,9 @@ const FiltroCss = StyleSheet.create({
       justifyContent: "center",
       alignItems: "center",
     },
+    agendamentosText:{
+
+    }
   });
 
   export default FiltroCss;
