@@ -6,3 +6,8 @@ const Imagens = {
 export default Imagens
 
 
+{/*
+    site pra fazer os ícones
+    https://buildicon.netlify.app/?color=white
+
+    */}
