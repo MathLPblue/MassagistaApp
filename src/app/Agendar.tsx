@@ -16,12 +16,12 @@ const auth = getAuth(app);
 export default function ScheduleScreen() {
   const [cliente, setCliente] = useState('');
   const [phone, setPhone] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const navigation = useNavigation();
 
-  const onDateChange = (selectedDate: Date) => {
+  const onDateChange = (selectedDate: Date | null) => {
     setShowDatePicker(false);
     if (selectedDate && isValidDate(selectedDate)) {
       setDate(selectedDate);
@@ -39,9 +39,9 @@ export default function ScheduleScreen() {
     }
     const selectedHour = selectedDate.getHours();
 
-    if(selectedHour < 9 || selectedHour >= 20){
-        Alert.alert('erro', "Por favor, escolha um horário entre 09:00 e 20:00");
-        return false;
+    if (selectedHour < 9 || selectedHour >= 20) {
+      Alert.alert('Erro', 'Por favor, escolha um horário entre 09:00 e 20:00');
+      return false;
     }
     return true;
   };
@@ -55,30 +55,26 @@ export default function ScheduleScreen() {
       Alert.alert('Erro', 'Por favor, insira seu telefone.');
       return false;
     }
-
     return true;
   };
 
   const handleSchedule = async () => {
-
-    const user = auth.currentUser!;
-    const userEmail = user.email;
-
+    const user = auth.currentUser;
+    const userEmail = user?.email;
     if (validateFields()) {
       try {
         await addDoc(collection(db, 'agendamentos'), {
           cliente,
           phone,
-          date: date.toISOString(),
+          date: date ? date.toISOString() : '',
           createdAt: new Date(),
           email: userEmail,
           status: 'Pendente'
         });
-
-        Alert.alert('Agendamento Confirmado', `Agendado para: ${date.toLocaleString()}\nNome: ${cliente}\nTelefone: ${phone}`);
+        Alert.alert('Agendamento Confirmado', `Agendado para: ${date?.toLocaleString()}\nNome: ${cliente}\nTelefone: ${phone}`);
         setCliente('');
         setPhone('');
-        setDate(new Date());
+        setDate(null);
       } catch (error) {
         console.error('Erro ao agendar:', error);
         Alert.alert('Erro', 'Houve um problema ao realizar o agendamento. Tente novamente.');
@@ -96,53 +92,55 @@ export default function ScheduleScreen() {
   }
 
   return (
-    //https://stackoverflow.com/questions/49399114/react-native-change-opacity-colour-of-imagebackground
+        //https://stackoverflow.com/questions/49399114/react-native-change-opacity-colour-of-imagebackground
 
-    <ImageBackground source={Imagens.backgroundImage} imageStyle = {{opacity:0.25}} style={AgendarCss.container}>
-    <NavBar/>
-    <ScrollView contentContainerStyle={AgendarCss.container}>
-      <View style={AgendarCss.ContainerTitulo}>
-        <Text style={AgendarCss.title}>Agende a sua massagem</Text>
-      </View>
+      <ImageBackground source={Imagens.backgroundImage} imageStyle = {{opacity:0.25}} style={AgendarCss.container}>
+      <NavBar/>
+      <ScrollView contentContainerStyle={AgendarCss.container}>
+        <View style={AgendarCss.ContainerTitulo}>
+          <Text style={AgendarCss.title}>Agende a sua massagem</Text>
+        </View>
 
-      <Text style={AgendarCss.label}>Nome:</Text>
-      <TextInput
-        style={AgendarCss.input}
-        value={cliente}
-        onChangeText={setCliente}
-        placeholder="Digite seu nome"
-      />
+        <Text style={AgendarCss.label}>Nome:</Text>
+        <TextInput
+          style={AgendarCss.input}
+          value={cliente}
+          onChangeText={setCliente}
+          placeholder="Digite seu nome"
+        />
 
-      <Text style={AgendarCss.label}>Telefone:</Text>
-      <TextInput
-        style={AgendarCss.input}
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-        placeholder="Digite seu telefone"
-      />
+        <Text style={AgendarCss.label}>Telefone:</Text>
+        <TextInput
+          style={AgendarCss.input}
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="phone-pad"
+          placeholder="Digite seu telefone"
+        />
 
-      <TouchableOpacity style={AgendarCss.btnDataHora} onPress={() => setShowDatePicker(true)}>
-        <Text style={AgendarCss.btnConfrimaDetalhes}>Escolha a data e hora da massagem</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={AgendarCss.btnDataHora} onPress={() => setShowDatePicker(true)}>
+          <Text style={AgendarCss.btnConfrimaDetalhes}>Escolha a data e hora da massagem</Text>
+        </TouchableOpacity>
 
-      <DateTimePickerModal
-        isVisible={showDatePicker}
-        mode="datetime"
-        onConfirm={onDateChange}
-        onCancel={() => setShowDatePicker(false)}
-      />
+        <DateTimePickerModal
+          isVisible={showDatePicker}
+          mode="datetime"
+          onConfirm={onDateChange}
+          onCancel={() => setShowDatePicker(false)}
+        />
 
-      <Text style={AgendarCss.dateText}>Data e Hora escolhidas: {"\n"} {date.toLocaleString()}</Text>
+        {date && (
+          <Text style={AgendarCss.dateText}>Data e Hora escolhidas: {"\n"} {date.toLocaleString()}</Text>
+        )}
 
-      <TouchableOpacity style={AgendarCss.btnConfirma} onPress={handleSchedule}>
-        <Text style={AgendarCss.btnConfrimaDetalhes}>Confirmar Agendamento</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={AgendarCss.btnConfirma} onPress={handleSchedule}>
+          <Text style={AgendarCss.btnConfrimaDetalhes}>Confirmar Agendamento</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={AgendarCss.backButton} onPress={() => navigation.goBack()}>
-        <Text style={AgendarCss.btnConfrimaDetalhes}>Voltar</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={AgendarCss.backButton} onPress={() => navigation.goBack()}>
+          <Text style={AgendarCss.btnConfrimaDetalhes}>Voltar</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </ImageBackground>
   );
 }

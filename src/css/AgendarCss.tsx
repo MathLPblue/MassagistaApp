@@ -64,6 +64,7 @@ const AgendarCss = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontFamily:'Ubuntu_700Bold',
+    textAlign:'center'
   },
   btnDataHora:{
     backgroundColor: '#33afff',
