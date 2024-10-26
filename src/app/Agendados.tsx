@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Modal, Linking } from 'react-native';
 import { db } from '../services/firebaseconfig';
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { Link } from 'expo-router';
 import AgendadosCss from '../css/AgendadosCss';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { Picker } from '@react-native-picker/picker';
@@ -37,11 +36,14 @@ export default function Agendados() {
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
   const [filtradoAgendamentos, setFiltradoAgendamentos] = useState<Agendamento[]>([]);
   const [newStatus, setNewStatus] = useState<StatusAgendamento | null>(null);
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const auth = getAuth();
   const user = auth.currentUser;
 
   useEffect(() => {
     const fetchAgendamentos = async () => {
+      if (!selectedDay) return;
+
       try {
         const agendamentosCollection = collection(db, 'agendamentos');
         let agendamentosQuery = query(agendamentosCollection);
@@ -71,21 +73,28 @@ export default function Agendados() {
           status: doc.data().status as StatusAgendamento,
         }));
 
+        const filtrado = agendamentosList.filter(agendamento => agendamento.data === selectedDay);
+        setFiltradoAgendamentos(filtrado);
         setAgendamentos(agendamentosList);
-        setFiltradoAgendamentos(agendamentosList);
       } catch (error) {
         console.error('Erro ao buscar agendamentos:', error);
       }
     };
 
     fetchAgendamentos();
-  }, [user]);
+  }, [selectedDay, user]);
 
-  const filterByDay = (day: string) => {
-    const filtrado = agendamentos.filter(agendamento => agendamento.data === day);
-    setFiltradoAgendamentos(filtrado);
+  const filterByDay = (day: string | null) => {
+    // cara, isso tá terrível
+    if (day === null){
+        setSelectedDay(null);
+        setFiltradoAgendamentos([]);
+    } else{
+        setSelectedDay(day);
+        const filtrado = agendamentos.filter(agendamento => agendamento.data === day);
+        setFiltradoAgendamentos(filtrado);
+    }
   };
-
   if (!fontLoaded) {
     return null;
   }
@@ -128,6 +137,13 @@ export default function Agendados() {
       </TouchableOpacity>
     </View>
   );
+
+  {/*]
+
+    Pretendo fazer uma função que mude ou a cor de fundo, ou adicione uma cor diferente dependendo do Status do agendamento
+    Também seria interessante adicionar um botão que mostraria TODOS os agendamentos, filtrasse eles por Dia e Status
+
+    */}
 
   return (
     <View style={AgendadosCss.container}>

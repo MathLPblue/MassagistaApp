@@ -5,7 +5,7 @@ import 'moment/locale/pt-br';
 import FiltroCss from '../css/FiltroCss';
 
 interface FiltroProps {
-  onSelectDay: (day: string) => void;
+  onSelectDay: (day: string | null) => void;
 }
 
 const Filtro: React.FC<FiltroProps> = ({ onSelectDay }) => {
@@ -25,9 +25,15 @@ const Filtro: React.FC<FiltroProps> = ({ onSelectDay }) => {
 
   const handlePress = (day: string) => {
     const diaNum = Number(day.split(',')[0]);
-    setDiaSelecionado(diaNum);
-    const diaFormatado = moment().date(diaNum).format('DD/MM/YYYY');
-    onSelectDay(diaFormatado);
+    
+    if (DiaSelecionado === diaNum) {
+        setDiaSelecionado(null);
+        onSelectDay(null);
+      } else {
+        setDiaSelecionado(diaNum);
+        const diaFormatado = moment().date(diaNum).format('DD/MM/YYYY');
+        onSelectDay(diaFormatado);
+      }
   };
 
   return (
