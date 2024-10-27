@@ -38,13 +38,20 @@ Este App para Agendamento de Massagens facilita o agendamento de sessões de mas
 1. Clone o repositório:
 
 Primeiro, clone o repositório:
-`git clone https://github.com/MathLPblue/MassagistaApp.git`
+```bash
+git clone https://github.com/MathLPblue/MassagistaApp.git
+```
 Em seguida, entre na pasta criada:
-`cd MassagistaApp`
+```bash
+cd MassagistaApp
+```
 E então, instale as dependências:
-`npm install`
+```bash
+npm install
+```
 Por fim, inicie o projeto:
-`npx expo start`
-
+```bash
+npx expo start
+```
 
 ## Telas do Aplicativo
