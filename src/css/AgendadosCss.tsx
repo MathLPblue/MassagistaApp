@@ -108,6 +108,19 @@ const AgendadosCss = StyleSheet.create ({
         fontFamily:'Ubuntu_400Regular',
         fontSize:15
       },
+      StatusIndicador: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 5,
+    },
+      statusTexto: {
+        marginLeft: 5,
+        fontSize: 16,
+        fontFamily: 'Ubuntu_400Regular',
+        fontWeight:'900'
+    },
+
+
 })
 
 export default AgendadosCss

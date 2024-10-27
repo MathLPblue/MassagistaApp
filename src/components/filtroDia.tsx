@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import FiltroCss from '../css/FiltroCss';
-
+// Mudei o nome do arquivo pois pretendo fazer mais um filtro
 interface FiltroProps {
   onSelectDay: (day: string | null) => void;
 }
@@ -25,7 +25,7 @@ const Filtro: React.FC<FiltroProps> = ({ onSelectDay }) => {
 
   const handlePress = (day: string) => {
     const diaNum = Number(day.split(',')[0]);
-    
+
     if (DiaSelecionado === diaNum) {
         setDiaSelecionado(null);
         onSelectDay(null);
