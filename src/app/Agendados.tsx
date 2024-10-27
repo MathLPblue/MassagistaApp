@@ -135,11 +135,10 @@ export default function Agendados() {
         <Text style={AgendadosCss.itemTexto}>Nome: {item.cliente}</Text>
         <Text style={AgendadosCss.itemTexto}>Data: {item.data}</Text>
         <Text style={AgendadosCss.itemTexto}>Hora: {item.hora}</Text>
+        {StatusIndicador(item.status)}
         <TouchableOpacity style={AgendadosCss.btnConfirma} onPress={() => handleSchedule(item)}>
           <Text style={AgendadosCss.btnConfrimaDetalhes}>Detalhes</Text>
         </TouchableOpacity>
-        {StatusIndicador(item.status)}
-
     </View>
   );
 
@@ -176,23 +175,45 @@ export default function Agendados() {
             {selectedAgendamento && (
               <>
                 <Text style={AgendadosCss.modalTitulo}>Detalhes do Agendamento</Text>
-                <Text style={AgendadosCss.modalTexto}>Nome: {selectedAgendamento.cliente}</Text>
-                <Text style={AgendadosCss.modalTexto}>Data: {selectedAgendamento.data}</Text>
-                <Text style={AgendadosCss.modalTexto}>Hora: {selectedAgendamento.hora}</Text>
+
+                <Text style={AgendadosCss.modalTexto}>
+                    <Text style={AgendadosCss.modalTextoBold}>Nome: </Text>
+                    {selectedAgendamento.cliente}
+                </Text>
+
+                <Text style={AgendadosCss.modalTexto}>
+                    <Text style={AgendadosCss.modalTextoBold}>Data: </Text>
+                    {selectedAgendamento.data}
+                </Text>
+
+                <Text style={AgendadosCss.modalTexto}>
+                    <Text style={AgendadosCss.modalTextoBold}>Hora: </Text>
+                    {selectedAgendamento.hora}
+                </Text>
+
+
                 <TouchableOpacity onPress={() => handleCallWhatsApp(selectedAgendamento.celular)}>
-                  <Text style={AgendadosCss.modalTexto}>Celular: {selectedAgendamento.celular}</Text>
+
+                <Text style={AgendadosCss.modalTexto}>
+                    <Text style={AgendadosCss.modalTextoBold}>Celular: </Text>
+                    {selectedAgendamento.celular}
+                </Text>
+
                 </TouchableOpacity>
 
-                <Text style={AgendadosCss.modalTexto}>Mudar Status:</Text>
-                <Picker
-                  selectedValue={newStatus || selectedAgendamento.status}
-                  style={AgendadosCss.Picker}
-                  onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}
-                >
-                  <Picker.Item label="Pendente" value={StatusAgendamento.Pendente} />
-                  <Picker.Item label="Concluído" value={StatusAgendamento.Concluido} />
-                  <Picker.Item label="Cancelado" value={StatusAgendamento.Cancelado} />
-                </Picker>
+                <Text style={AgendadosCss.modalTextoBold}>Mudar Status:</Text>
+
+                <View style={AgendadosCss.PickerContainer}>
+                    <Picker
+                        selectedValue={newStatus || selectedAgendamento?.status}
+                        style={AgendadosCss.Picker}
+                        onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}
+                    >
+                        <Picker.Item label="Pendente" value={StatusAgendamento.Pendente} />
+                        <Picker.Item label="Concluído" value={StatusAgendamento.Concluido} />
+                        <Picker.Item label="Cancelado" value={StatusAgendamento.Cancelado} />
+                    </Picker>
+                </View>
 
                 <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => handleSaveStatus(selectedAgendamento.id)}>
                   <Text style={AgendadosCss.btnStatusDetalhes}>Salvar Alterações</Text>
@@ -205,12 +226,14 @@ export default function Agendados() {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity onPress={() => console.log('agendados')}>
+
+      <TouchableOpacity style={AgendadosCss.btnTodosAgendados} onPress={() => console.log('Todos os agendados')}>
         {/* Ainda vou fazer um CSS e uma lógica para este botão aparecer apenas quando nenhum dia for selecionado */}
-        <Text>
+        <Text style={AgendadosCss.btnTodosAgendadosTexto}>
           <Link href="/TodosAgendados">Todos os agendados</Link>
         </Text>
       </TouchableOpacity>
+
     </View>
   );
 }

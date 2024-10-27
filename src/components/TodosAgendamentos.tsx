@@ -8,6 +8,7 @@ import AgendadosCss from '../css/AgendadosCss';
 import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { Picker } from '@react-native-picker/picker';
 import { getAuth } from 'firebase/auth';
+import StatusIndicador from './StatusAgendamento';
 
 {/*
     Aqui usei o código antigo da tela agendamentos,
@@ -127,7 +128,7 @@ export default function TodosAgendados() {
       <Text style={AgendadosCss.itemTexto}> Nome: {item.cliente} </Text>
       <Text style={AgendadosCss.itemTexto}> Data: {item.data} </Text>
       <Text style={AgendadosCss.itemTexto}> Hora: {item.hora} </Text>
-      <Text style={AgendadosCss.itemTexto}> Status: {item.status} </Text>
+      {StatusIndicador(item.status)}
       <TouchableOpacity style={AgendadosCss.btnConfirma} onPress={() => handleSchedule(item)}>
         <Text style={AgendadosCss.btnConfrimaDetalhes}>Detalhes</Text>
       </TouchableOpacity>
@@ -164,23 +165,46 @@ export default function TodosAgendados() {
             {selectedAgendamento && (
               <>
                 <Text style={AgendadosCss.modalTitulo}>Detalhes do Agendamento</Text>
-                <Text style={AgendadosCss.modalTexto}>Nome: {selectedAgendamento.cliente}</Text>
-                <Text style={AgendadosCss.modalTexto}>Data: {selectedAgendamento.data}</Text>
-                <Text style={AgendadosCss.modalTexto}>Hora: {selectedAgendamento.hora}</Text>
+
+                <Text style={AgendadosCss.modalTexto}>
+                    <Text style={AgendadosCss.modalTextoBold}>Nome: </Text>
+                    {selectedAgendamento.cliente}
+                </Text>
+
+                <Text style={AgendadosCss.modalTexto}>
+                    <Text style={AgendadosCss.modalTextoBold}>Data: </Text>
+                    {selectedAgendamento.data}
+                </Text>
+
+                <Text style={AgendadosCss.modalTexto}>
+                    <Text style={AgendadosCss.modalTextoBold}>Hora: </Text>
+                    {selectedAgendamento.hora}
+                </Text>
+
+
                 <TouchableOpacity onPress={() => handleCallWhatsApp(selectedAgendamento.celular)}>
-                  <Text style={AgendadosCss.modalTexto}>Celular: {selectedAgendamento.celular}</Text>
+
+                <Text style={AgendadosCss.modalTexto}>
+                    <Text style={AgendadosCss.modalTextoBold}>Celular: </Text>
+                    {selectedAgendamento.celular}
+                </Text>
+
                 </TouchableOpacity>
 
+                <Text style={AgendadosCss.modalTextoBold}>Mudar Status:</Text>
 
-                <Text style={AgendadosCss.modalTexto}>Mudar Status:</Text>
-                <Picker selectedValue={newStatus || selectedAgendamento.status} style={AgendadosCss.Picker}
-                 onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}>
+                <View style={AgendadosCss.PickerContainer}>
+                    <Picker
+                        selectedValue={newStatus || selectedAgendamento?.status}
+                        style={AgendadosCss.Picker}
+                        onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}
+                    >
+                        <Picker.Item label="Pendente" value={StatusAgendamento.Pendente} />
+                        <Picker.Item label="Concluído" value={StatusAgendamento.Concluido} />
+                        <Picker.Item label="Cancelado" value={StatusAgendamento.Cancelado} />
+                    </Picker>
+                </View>
 
-                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Pendente" value={StatusAgendamento.Pendente} />
-                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Cancelado" value={StatusAgendamento.Cancelado} />
-                  <Picker.Item style = {AgendadosCss.PickerTexto} label="Concluído" value={StatusAgendamento.Concluido} />
-
-                </Picker>
                 <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => handleSaveStatus(selectedAgendamento.id)}>
                   <Text style={AgendadosCss.btnStatusDetalhes}>Salvar Alterações</Text>
                 </TouchableOpacity>

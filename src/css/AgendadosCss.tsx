@@ -75,6 +75,22 @@ const AgendadosCss = StyleSheet.create ({
         fontSize: 16,
         fontFamily:'Ubuntu_700Bold',
       },
+      btnTodosAgendados:{
+        backgroundColor: '#33afff',
+        padding: 15,
+        borderRadius: 20,
+        alignItems: 'center',
+        marginTop: -15,
+        width: '30%',
+        alignSelf: 'flex-start',
+      },
+      btnTodosAgendadosTexto:{
+        color: '#ffff',
+        fontSize:15,
+        fontFamily:'Ubuntu_700Bold',
+        textAlign:'center'
+
+      },
       modalContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -95,18 +111,38 @@ const AgendadosCss = StyleSheet.create ({
         marginBottom: 20,
       },
       modalTexto: {
-        fontSize: 16,
+        fontSize: 18,
         marginBottom: 20,
-        fontFamily:'Ubuntu_400Regular',
-      },
-      Picker:{
+        fontFamily: 'Ubuntu_400Regular',
+        color: '#333',
+    },
+    modalTextoBold:{
+        fontSize: 18,
+        marginBottom: 20,
+        fontFamily: 'Ubuntu_700Bold',
+        color: '#333',
+    },
+    Picker: {
         height: 50,
-        width: 200,
-        backgroundColor:'grey',
-      },
-      PickerTexto:{
-        fontFamily:'Ubuntu_400Regular',
-        fontSize:15
+        width: 220,
+        backgroundColor: '#f2f2f2',
+        borderRadius: 10,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        paddingHorizontal: 10,
+    },
+    PickerTexto: {
+        fontFamily: 'Ubuntu_400Regular',
+        fontSize: 16,
+        color: '#555',
+        textAlign:'center'
+    },
+    PickerContainer: {
+        height: 50,
+        width: 220,
+        backgroundColor: '#f2f2f2',
+        borderRadius: 10,
+        overflow: 'hidden',
       },
       StatusIndicador: {
         flexDirection: 'row',
