@@ -59,9 +59,9 @@ export default function Agendados() {
 
           if (userDoc) {
             const role = userDoc.data().role;
-            if (role === 'cliente') {
-              agendamentosQuery = query(agendamentosCollection, where('email', '==', userEmail));
-            }
+            agendamentosQuery = role === 'cliente'
+              ? query(agendamentosCollection, where('email', '==', userEmail))
+              : agendamentosCollection;
           }
         }
 
