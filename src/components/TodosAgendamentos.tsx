@@ -1,27 +1,22 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Modal, Button, Linking } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native';
 import { db } from '../services/firebaseconfig';
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { Link } from 'expo-router';
-import AgendadosCss from '../css/AgendadosCss';
-import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
-import { Picker } from '@react-native-picker/picker';
 import { getAuth } from 'firebase/auth';
-import StatusIndicador from './StatusAgendamento';
+import TodosAgendadosCss from '../css/TodosAgendadosCss';
+import AgendamentoItem from './AgendamentoItem';
+import AgendamentoModal from './AgendamentoModal';
+import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
+import { Linking } from 'react-native';
 
-{/*
-    Aqui usei o código antigo da tela agendamentos,
-    já que ele puxa todos os agendamentos (de acordo com usuário),
-    enfim, vou reutilizar grande parte dele a fim de evitar mais trabalho.
-
-    */}
 export enum StatusAgendamento {
   Pendente = 'Pendente',
   Cancelado = 'Cancelado',
-  Concluido = "Concluído"
+  Concluido = 'Concluído'
 }
-interface Agendamento {
+
+export interface Agendamento {
   id: string;
   cliente: string;
   data: string;
@@ -29,7 +24,6 @@ interface Agendamento {
   celular: string;
   status: StatusAgendamento;
 }
-
 
 export default function TodosAgendados() {
   const [fontLoaded] = useFonts({
@@ -41,6 +35,7 @@ export default function TodosAgendados() {
   const [selectedAgendamento, setSelectedAgendamento] = useState<Agendamento | null>(null);
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
   const [newStatus, setNewStatus] = useState<StatusAgendamento | null>(null);
+  const [pesquisarItem, setpesquisarItem] = useState('');
   const auth = getAuth();
   const user = auth.currentUser;
 
@@ -58,19 +53,11 @@ export default function TodosAgendados() {
 
           if (userDoc) {
             const role = userDoc.data().role;
-
-            if (role === 'cliente') {
-
-              agendamentosQuery = query(agendamentosCollection, where('email', '==', userEmail));
-
-            } else if (role === 'massagista') {
-
-              agendamentosQuery = agendamentosCollection;
-
-            }
+            agendamentosQuery = role === 'cliente'
+              ? query(agendamentosCollection, where('email', '==', userEmail))
+              : agendamentosCollection;
           }
         }
-
 
         const agendamentosSnapshot = await getDocs(agendamentosQuery);
         const agendamentosList = agendamentosSnapshot.docs.map(doc => ({
@@ -88,7 +75,6 @@ export default function TodosAgendados() {
     };
 
     fetchAgendamentos();
-
   }, [user]);
 
   if (!fontLoaded) {
@@ -123,100 +109,43 @@ export default function TodosAgendados() {
     }
   };
 
-  const AgendamentoItem = ({ item }: { item: Agendamento }) => (
-    <View style={AgendadosCss.agendamentoItem}>
-      <Text style={AgendadosCss.itemTexto}> Nome: {item.cliente} </Text>
-      <Text style={AgendadosCss.itemTexto}> Data: {item.data} </Text>
-      <Text style={AgendadosCss.itemTexto}> Hora: {item.hora} </Text>
-      {StatusIndicador(item.status)}
-      <TouchableOpacity style={AgendadosCss.btnConfirma} onPress={() => handleSchedule(item)}>
-        <Text style={AgendadosCss.btnConfrimaDetalhes}>Detalhes</Text>
-      </TouchableOpacity>
-    </View>
+  const filteredAgendamentos = agendamentos.filter(agendamento =>
+    agendamento.cliente.toLowerCase().includes(pesquisarItem.toLowerCase()) ||
+    agendamento.celular.includes(pesquisarItem)
   );
 
   return (
-    <View style={AgendadosCss.container}>
+    <View style={TodosAgendadosCss.container}>
       <StatusBar style="light" translucent={true} />
-
-      <View style={AgendadosCss.nav}>
-        <TouchableOpacity onPress={() => console.log("home")}>
-          <Text style={AgendadosCss.navItem}><Link href={"/Agendados"}>Voltar</Link></Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => console.log("agendar")}>
-          <Text style={AgendadosCss.navItem}><Link href={"/Agendar"}>Agendar</Link></Text>
+      <View style={TodosAgendadosCss.nav}>
+        <TouchableOpacity onPress={() => {}}>
+          <Text style={TodosAgendadosCss.navItem}>Voltar</Text>
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={agendamentos}
-        renderItem={AgendamentoItem}
-        keyExtractor={(item) => item.id}
+      <TextInput
+        style={TodosAgendadosCss.pesquisarInput}
+        placeholder="Pesquisar por nome ou celular"
+        value={pesquisarItem}
+        onChangeText={setpesquisarItem}
       />
 
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <FlatList
+        data={filteredAgendamentos}
+        renderItem={({ item }) => (
+          <AgendamentoItem item={item} onSchedule={handleSchedule} />
+        )}
+        keyExtractor={item => item.id}
+      />
+      <AgendamentoModal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={AgendadosCss.modalContainer}>
-          <View style={AgendadosCss.modalConteudo}>
-            {selectedAgendamento && (
-              <>
-                <Text style={AgendadosCss.modalTitulo}>Detalhes do Agendamento</Text>
-
-                <Text style={AgendadosCss.modalTexto}>
-                    <Text style={AgendadosCss.modalTextoBold}>Nome: </Text>
-                    {selectedAgendamento.cliente}
-                </Text>
-
-                <Text style={AgendadosCss.modalTexto}>
-                    <Text style={AgendadosCss.modalTextoBold}>Data: </Text>
-                    {selectedAgendamento.data}
-                </Text>
-
-                <Text style={AgendadosCss.modalTexto}>
-                    <Text style={AgendadosCss.modalTextoBold}>Hora: </Text>
-                    {selectedAgendamento.hora}
-                </Text>
-
-
-                <TouchableOpacity onPress={() => handleCallWhatsApp(selectedAgendamento.celular)}>
-
-                <Text style={AgendadosCss.modalTexto}>
-                    <Text style={AgendadosCss.modalTextoBold}>Celular: </Text>
-                    {selectedAgendamento.celular}
-                </Text>
-
-                </TouchableOpacity>
-
-                <Text style={AgendadosCss.modalTextoBold}>Mudar Status:</Text>
-
-                <View style={AgendadosCss.PickerContainer}>
-                    <Picker
-                        selectedValue={newStatus || selectedAgendamento?.status}
-                        style={AgendadosCss.Picker}
-                        onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}
-                    >
-                        <Picker.Item label="Pendente" value={StatusAgendamento.Pendente} />
-                        <Picker.Item label="Concluído" value={StatusAgendamento.Concluido} />
-                        <Picker.Item label="Cancelado" value={StatusAgendamento.Cancelado} />
-                    </Picker>
-                </View>
-
-                <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => handleSaveStatus(selectedAgendamento.id)}>
-                  <Text style={AgendadosCss.btnStatusDetalhes}>Salvar Alterações</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => setModalVisible(false)}>
-                  <Text style={AgendadosCss.btnStatusDetalhes}>Fechar</Text>
-                </TouchableOpacity>
-
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
+        agendamento={selectedAgendamento}
+        onClose={() => setModalVisible(false)}
+        onCall={handleCallWhatsApp}
+        newStatus={newStatus}
+        setNewStatus={setNewStatus}
+        onSaveStatus={handleSaveStatus}
+      />
     </View>
   );
 }

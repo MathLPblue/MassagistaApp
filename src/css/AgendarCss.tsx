@@ -17,7 +17,6 @@ const AgendarCss = StyleSheet.create({
   ContainerTitulo:{
     justifyContent:'center',
     alignItems:'center'
-
   },
   label: {
     marginBottom: 8,
@@ -42,12 +41,12 @@ const AgendarCss = StyleSheet.create({
 
   },
   backButton: {
-    backgroundColor: 'pink', // Define a cor rosa para o botão
+    backgroundColor: 'pink',
     padding: 15,
     borderRadius: 5,
-    alignItems: 'center', // Centraliza o texto dentro do botão
+    alignItems: 'center',
     marginTop: 20,
-    alignSelf: 'center', // Centraliza o botão na horizontal
+    alignSelf: 'center', 
   },
 
   btnConfirma: {

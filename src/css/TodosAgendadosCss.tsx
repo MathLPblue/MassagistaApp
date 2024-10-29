@@ -1,7 +1,7 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 
-const AgendadosCss = StyleSheet.create ({
+const TodosAgendadosCss = StyleSheet.create ({
     container: {
         flex: 1,
         padding: 0,
@@ -9,12 +9,13 @@ const AgendadosCss = StyleSheet.create ({
       },
       nav: {
         flexDirection: 'row',
-        justifyContent: 'space-around',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: '#33afff',
-        paddingVertical: 15,
         borderRadius: 10,
-        marginTop: Constants.statusBarHeight + 10,
+        marginTop: Constants.statusBarHeight,
+        alignSelf: 'flex-start',
+        padding:20
       },
       navItem: {
         color: 'white',
@@ -88,6 +89,7 @@ const AgendadosCss = StyleSheet.create ({
         fontSize:15,
         fontFamily:'Ubuntu_700Bold',
         textAlign:'center'
+
       },
       modalContainer: {
         flex: 1,
@@ -153,8 +155,15 @@ const AgendadosCss = StyleSheet.create ({
         fontFamily: 'Ubuntu_400Regular',
         fontWeight:'900'
     },
+    pesquisarInput: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        margin: 10,
+        padding: 10,
+        borderRadius: 5,
+      },
 
 
-});
-
-export default AgendadosCss
+ });
+ export default TodosAgendadosCss;
