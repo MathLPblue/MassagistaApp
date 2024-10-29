@@ -34,7 +34,7 @@ const AutenticarCss = StyleSheet.create({
     buttonContainer: {
       marginBottom: 16,
       fontFamily: 'Ubuntu_700Bold',
-      width:'40%',
+      width:'55%',
       alignSelf:'center'
     },
     btnLogin:{

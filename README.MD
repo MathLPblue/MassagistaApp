@@ -55,3 +55,39 @@ npx expo start
 ```
 
 ## Telas do Aplicativo
+
+### Tela de Autenticação
+![Tela Autenticar](assets/screenshot/Autenticar.jpeg)
+Tela para que o usuário possa logar.
+
+---
+
+### Tela Inicial
+![Tela Home](assets/screenshot/Home.jpeg)
+Tela inicial exibida após a autenticação do usuário.
+
+---
+
+### Tela de Agendamento
+![Tela Agendar](assets/screenshot/Agendar.jpeg)
+Tela onde o usuário pode agendar mensagens.
+
+#### Tela de Escolha de Data
+![Tela Agendar: Escolher Data](assets/screenshot/AgendarData.jpeg)
+Escolha a data do agendamento.
+
+#### Tela de Escolha de Hora
+![Tela Agendar: Escolher Hora](assets/screenshot/AgendarHora.jpeg)
+Escolha a hora do agendamento.
+
+---
+
+### Tela de Agendamentos Semanais
+![Tela Agendamentos](assets/screenshot/Agendamentos.jpeg)
+Tela para acompanhar os agendamentos programados para a semana.
+
+---
+
+### Tela de Todos os Agendamentos
+![Tela TodosAgendamentos](assets/screenshot/TodosAgendados.jpeg)
+Tela que exibe todos os agendamentos realizados, independentemente da data.
