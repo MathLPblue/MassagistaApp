@@ -20,6 +20,29 @@ export default function ScheduleScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const navigation = useNavigation();
+  //https://pt.stackoverflow.com/questions/293950/valida%C3%A7%C3%A3o-campo-telefone
+  //https://stackoverflow.com/questions/4338267/validate-phone-number-with-javascript
+  const celularValido = (phone: string) => {
+    const limpaCaracter = phone.replace(/\D/g, '');
+    return limpaCaracter.length === 11;
+  };
+  const validateFields = () => {
+    if (!cliente.trim()) {
+      Alert.alert('Erro', 'Por favor, insira seu nome.');
+      return false;
+    }
+    if (!phone.trim()) {
+      Alert.alert('Erro', 'Por favor, insira seu celular.');
+      return false;
+    }
+    if (!celularValido(phone)) {
+      Alert.alert('Erro', 'Por favor, digite um celular incluindo o DDD.');
+      return false;
+    }
+    return true;
+  };
+
+
 
   const onDateChange = (selectedDate: Date | null) => {
     setShowDatePicker(false);
@@ -46,17 +69,6 @@ export default function ScheduleScreen() {
     return true;
   };
 
-  const validateFields = () => {
-    if (!cliente.trim()) {
-      Alert.alert('Erro', 'Por favor, insira seu nome.');
-      return false;
-    }
-    if (!phone.trim()) {
-      Alert.alert('Erro', 'Por favor, insira seu telefone.');
-      return false;
-    }
-    return true;
-  };
 
   const handleSchedule = async () => {
     const user = auth.currentUser;
