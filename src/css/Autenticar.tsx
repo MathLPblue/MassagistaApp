@@ -13,7 +13,7 @@ const AutenticarCss = StyleSheet.create({
       maxWidth: 400,
       backgroundColor: '#fff',
       padding: 16,
-      borderRadius: 8,
+      borderRadius: 15,
       elevation: 3,
     },
     title: {
@@ -28,13 +28,25 @@ const AutenticarCss = StyleSheet.create({
       borderWidth: 1,
       marginBottom: 16,
       padding: 8,
-      borderRadius: 4,
+      borderRadius: 10,
       fontFamily: 'Ubuntu_400Regular'
     },
     buttonContainer: {
       marginBottom: 16,
-      fontFamily: 'Ubuntu_700Bold'
-      
+      fontFamily: 'Ubuntu_700Bold',
+      width:'40%',
+      alignSelf:'center'
+    },
+    btnLogin:{
+      backgroundColor: "#F2B3CA",
+      padding: 15,
+      borderRadius: 15
+    },
+    btnTexto:{
+      color: '#fff',
+      fontSize: 16,
+      fontFamily:'Ubuntu_700Bold',
+      textAlign:'center'
     },
     toggleText: {
       color: '#F2B3CA', // cor antiga #3498db
@@ -51,15 +63,14 @@ const AutenticarCss = StyleSheet.create({
       fontFamily: 'Ubuntu_400Regular'
     },
     logo:{
-      width: 120, 
-      height: 120, 
-      marginBottom: 10, 
-      borderRadius: 30, 
-      
+      width: 120,
+      height: 120,
+      marginBottom: 10,
+      borderRadius: 30,
     },
     ImgContainer:{
-      alignItems: 'center', 
-      marginBottom: 10, 
+      alignItems: 'center',
+      marginBottom: 10,
     }
   });
 

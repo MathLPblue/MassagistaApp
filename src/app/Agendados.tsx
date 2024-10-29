@@ -1,38 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Modal, Linking } from 'react-native';
-import { db } from '../services/firebaseconfig';
-import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import AgendadosCss from '../css/AgendadosCss';
-import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
-import { Picker } from '@react-native-picker/picker';
+import { View, Linking, TouchableOpacity, Text } from 'react-native';
 import { getAuth } from 'firebase/auth';
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { Link } from 'expo-router';
+
+import { db } from '../services/firebaseconfig';
+import AgendadosCss from '../css/AgendadosCss';
 import Filtro from '../components/filtroDia';
 import NavBar from '../components/NavBar';
-import { Link } from 'expo-router';
-import StatusIndicador from '../components/StatusAgendamento'
+import AgendamentoModal from '../components/AgendamentoModal';
+import AgendamentosLista from '../components/AgendamentoLista';
+import { Agendamento, StatusAgendamento } from '../types/AgendamentoTypes';
+import UbuntuFonte from '../fonts/UbuntuFont';
 
-export enum StatusAgendamento {
-  Pendente = 'Pendente',
-  Concluido = 'Concluído',
-  Cancelado = 'Cancelado',
-}
-
-interface Agendamento {
-  id: string;
-  cliente: string;
-  data: string;
-  hora: string;
-  celular: string;
-  status: StatusAgendamento;
-}
 
 export default function Agendados() {
-  const [fontLoaded] = useFonts({
-    Ubuntu_400Regular,
-    Ubuntu_700Bold,
-  });
-
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAgendamento, setSelectedAgendamento] = useState<Agendamento | null>(null);
   const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
@@ -87,7 +70,6 @@ export default function Agendados() {
   }, [selectedDay, user]);
 
   const filterByDay = (day: string | null) => {
-    // cara, isso tá terrível
     if (day === null){
         setSelectedDay(null);
         setFiltradoAgendamentos([]);
@@ -97,9 +79,6 @@ export default function Agendados() {
         setFiltradoAgendamentos(filtrado);
     }
   };
-  if (!fontLoaded) {
-    return null;
-  }
 
   const handleSchedule = (agendamento: Agendamento) => {
     setSelectedAgendamento(agendamento);
@@ -129,28 +108,8 @@ export default function Agendados() {
     }
   };
 
-  const AgendamentoItem = ({ item }: { item: Agendamento }) => (
-    <View style={AgendadosCss.agendamentoItem}>
-
-        <Text style={AgendadosCss.itemTexto}>Nome: {item.cliente}</Text>
-        <Text style={AgendadosCss.itemTexto}>Data: {item.data}</Text>
-        <Text style={AgendadosCss.itemTexto}>Hora: {item.hora}</Text>
-        {StatusIndicador(item.status)}
-        <TouchableOpacity style={AgendadosCss.btnConfirma} onPress={() => handleSchedule(item)}>
-          <Text style={AgendadosCss.btnConfrimaDetalhes}>Detalhes</Text>
-        </TouchableOpacity>
-    </View>
-  );
-
-
-  {/*]
-
-    Pretendo fazer uma função que mude ou a cor de fundo, ou adicione uma cor diferente dependendo do Status do agendamento
-    Também seria interessante adicionar um botão que mostraria TODOS os agendamentos, filtrasse eles por Dia e Status
-
-    */}
-
   return (
+    <UbuntuFonte>
     <View style={AgendadosCss.container}>
       <StatusBar style="light" translucent={true} />
 
@@ -158,82 +117,27 @@ export default function Agendados() {
 
       <Filtro onSelectDay={filterByDay} />
 
-      <FlatList
-        data={filtradoAgendamentos}
-        renderItem={AgendamentoItem}
-        keyExtractor={item => item.id}
+      <AgendamentosLista
+      data={filtradoAgendamentos}
+      onSchedule={handleSchedule}
       />
 
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <AgendamentoModal
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={AgendadosCss.modalContainer}>
-          <View style={AgendadosCss.modalConteudo}>
-            {selectedAgendamento && (
-              <>
-                <Text style={AgendadosCss.modalTitulo}>Detalhes do Agendamento</Text>
-
-                <Text style={AgendadosCss.modalTexto}>
-                    <Text style={AgendadosCss.modalTextoBold}>Nome: </Text>
-                    {selectedAgendamento.cliente}
-                </Text>
-
-                <Text style={AgendadosCss.modalTexto}>
-                    <Text style={AgendadosCss.modalTextoBold}>Data: </Text>
-                    {selectedAgendamento.data}
-                </Text>
-
-                <Text style={AgendadosCss.modalTexto}>
-                    <Text style={AgendadosCss.modalTextoBold}>Hora: </Text>
-                    {selectedAgendamento.hora}
-                </Text>
-
-
-                <TouchableOpacity onPress={() => handleCallWhatsApp(selectedAgendamento.celular)}>
-
-                <Text style={AgendadosCss.modalTexto}>
-                    <Text style={AgendadosCss.modalTextoBold}>Celular: </Text>
-                    {selectedAgendamento.celular}
-                </Text>
-
-                </TouchableOpacity>
-
-                <Text style={AgendadosCss.modalTextoBold}>Mudar Status:</Text>
-
-                <View style={AgendadosCss.PickerContainer}>
-                    <Picker
-                        selectedValue={newStatus || selectedAgendamento?.status}
-                        style={AgendadosCss.Picker}
-                        onValueChange={(itemValue) => setNewStatus(itemValue as StatusAgendamento)}
-                    >
-                        <Picker.Item label="Pendente" value={StatusAgendamento.Pendente} />
-                        <Picker.Item label="Concluído" value={StatusAgendamento.Concluido} />
-                        <Picker.Item label="Cancelado" value={StatusAgendamento.Cancelado} />
-                    </Picker>
-                </View>
-
-                <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => handleSaveStatus(selectedAgendamento.id)}>
-                  <Text style={AgendadosCss.btnStatusDetalhes}>Salvar Alterações</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={AgendadosCss.btnStatus} onPress={() => setModalVisible(false)}>
-                  <Text style={AgendadosCss.btnStatusDetalhes}>Fechar</Text>
-                </TouchableOpacity>
-              </>
-            )}
-          </View>
-        </View>
-      </Modal>
+        agendamento={selectedAgendamento}
+        onClose={() => setModalVisible(false)}
+        onCall={handleCallWhatsApp}
+        newStatus={newStatus}
+        setNewStatus={setNewStatus}
+        onSaveStatus={handleSaveStatus}
+      />
 
       <TouchableOpacity style={AgendadosCss.btnTodosAgendados} onPress={() => console.log('Todos os agendados')}>
-        {/* Ainda vou fazer um CSS e uma lógica para este botão aparecer apenas quando nenhum dia for selecionado */}
         <Text style={AgendadosCss.btnTodosAgendadosTexto}>
           <Link href="/TodosAgendados">Todos os agendados</Link>
         </Text>
       </TouchableOpacity>
-
     </View>
+    </UbuntuFonte>
   );
 }

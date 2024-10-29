@@ -7,7 +7,6 @@ const FiltroCss = StyleSheet.create({
       flexDirection: "row",
     },
     CaixaDia: {
-      //Acho que o tamanho está okay.
       width: 85,
       height: 85,
       justifyContent: "center",

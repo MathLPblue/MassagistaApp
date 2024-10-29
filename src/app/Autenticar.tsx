@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Image, View, Text, TextInput, Button, ScrollView } from 'react-native';
+import { Image, View, Text, TextInput, Button, ScrollView, TouchableOpacity } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
+
 import Home from './Home';
 import AutenticarCss from '../css/Autenticar';
 import Imagens from '../imgs/Imagens';
-import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import app from '../services/firebaseconfig';
+import UbuntuFonte from '../fonts/UbuntuFont';
+
 
 interface AuthScreenProps {
   email: string;
@@ -41,7 +43,11 @@ const AuthScreen: React.FC<AuthScreenProps> = ({ email, setEmail, password, setP
         secureTextEntry
       />
       <View style={AutenticarCss.buttonContainer}>
-        <Button title={isLogin ? 'Entrar' : 'Cadastre-se'} onPress={handleAuthentication} color="#F2B3CA" />
+        <TouchableOpacity onPress={handleAuthentication} style={AutenticarCss.btnLogin}>
+            <Text style={AutenticarCss.btnTexto}>
+                {isLogin ? 'Entrar' : 'Cadastre-se'}
+            </Text>
+        </TouchableOpacity>
       </View>
 
       <View style={AutenticarCss.bottomContainer}>
@@ -113,16 +119,9 @@ const App: React.FC = () => {
     }
   };
 
-  const [fontLoaded] = useFonts({
-    Ubuntu_400Regular,
-    Ubuntu_700Bold,
-  });
-
-  if (!fontLoaded) {
-    return null;
-  }
 
   return (
+    <UbuntuFonte>
     <ScrollView contentContainerStyle={AutenticarCss.container}>
       {user ? (
         <AuthenticatedScreen user={user} handleAuthentication={handleAuthentication} />
@@ -138,6 +137,7 @@ const App: React.FC = () => {
         />
       )}
     </ScrollView>
+    </UbuntuFonte>
   );
 };
 

@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, ScrollView, Alert, TouchableOpacity, ImageBackground } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { useNavigation } from '@react-navigation/native';
-import AgendarCss from '../css/AgendarCss';
-import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
-import app from '../services/firebaseconfig';
 import { getAuth } from 'firebase/auth';
+
+import AgendarCss from '../css/AgendarCss';
+import app from '../services/firebaseconfig';
 import Imagens from '../imgs/Imagens';
 import NavBar from '../components/NavBar';
+import UbuntuFonte from '../fonts/UbuntuFont';
 
 const db = getFirestore(app);
 const auth = getAuth(app);
@@ -94,18 +95,10 @@ export default function ScheduleScreen() {
     }
   };
 
-  const [fontLoaded] = useFonts({
-    Ubuntu_400Regular,
-    Ubuntu_700Bold,
-  });
-
-  if (!fontLoaded) {
-    return null;
-  }
-
   return (
         //https://stackoverflow.com/questions/49399114/react-native-change-opacity-colour-of-imagebackground
 
+      <UbuntuFonte>
       <ImageBackground source={Imagens.backgroundImage} imageStyle = {{opacity:0.25}} style={AgendarCss.container}>
       <NavBar/>
       <ScrollView contentContainerStyle={AgendarCss.container}>
@@ -154,5 +147,6 @@ export default function ScheduleScreen() {
         </TouchableOpacity>
       </ScrollView>
     </ImageBackground>
+    </UbuntuFonte>
   );
 }

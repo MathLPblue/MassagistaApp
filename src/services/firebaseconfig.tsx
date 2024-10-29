@@ -2,10 +2,6 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 
-
-//aqui vai precisar de um measurementId, ativa o google analytics
-// aí depois vai em project settings, general, web app, e copia e cola,
-// eu estava testando com outro banco, por isso a mudança.
 const firebaseConfig = {
     apiKey: "AIzaSyCwZ4sA-UKJFGFs71-s8OBFHMMoZKwSWvI",
     authDomain: "massagem-do-marlon.firebaseapp.com",

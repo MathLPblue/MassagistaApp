@@ -1,23 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
-import Imagens from '../imgs/Imagens';
 import { Link, useRouter } from 'expo-router';
-import HomeCss from '../css/HomeCss';
-import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
 import { getAuth, signOut } from 'firebase/auth';
+
+import Imagens from '../imgs/Imagens';
+import HomeCss from '../css/HomeCss';
 import NavBar from '../components/NavBar';
+import UbuntuFonte from '../fonts/UbuntuFont';
+
 
 export default function Home() {
-  const [fontLoaded] = useFonts({
-    Ubuntu_400Regular,
-    Ubuntu_700Bold,
-  });
-  const router = useRouter();
-  if (!fontLoaded) {
-    return null;
-  }
 
+  const router = useRouter();
 
   const handleLogout = () => {
     const auth = getAuth();
@@ -32,6 +27,7 @@ export default function Home() {
   };
 
   return (
+    <UbuntuFonte>
     <View style={HomeCss.container}>
       <StatusBar style="light" translucent={true} />
       <NavBar/>
@@ -52,5 +48,6 @@ export default function Home() {
         </TouchableOpacity>
       </View>
     </View>
+    </UbuntuFonte>
   );
 }

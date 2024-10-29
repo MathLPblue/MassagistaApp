@@ -1,35 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Linking } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { db } from '../services/firebaseconfig';
 import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
+import { Link } from 'expo-router';
+
 import TodosAgendadosCss from '../css/TodosAgendadosCss';
-import AgendamentoItem from './AgendamentoItem';
 import AgendamentoModal from './AgendamentoModal';
-import { useFonts, Ubuntu_400Regular, Ubuntu_700Bold } from '@expo-google-fonts/ubuntu';
-import { Linking } from 'react-native';
-
-export enum StatusAgendamento {
-  Pendente = 'Pendente',
-  Cancelado = 'Cancelado',
-  Concluido = 'Concluído'
-}
-
-export interface Agendamento {
-  id: string;
-  cliente: string;
-  data: string;
-  hora: string;
-  celular: string;
-  status: StatusAgendamento;
-}
+import AgendamentosLista from '../components/AgendamentoLista';
+import { Agendamento, StatusAgendamento } from '../types/AgendamentoTypes';
+import UbuntuFonte from '../fonts/UbuntuFont';
 
 export default function TodosAgendados() {
-  const [fontLoaded] = useFonts({
-    Ubuntu_400Regular,
-    Ubuntu_700Bold,
-  });
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAgendamento, setSelectedAgendamento] = useState<Agendamento | null>(null);
@@ -77,10 +60,6 @@ export default function TodosAgendados() {
     fetchAgendamentos();
   }, [user]);
 
-  if (!fontLoaded) {
-    return null;
-  }
-
   const handleSchedule = (agendamento: Agendamento) => {
     setSelectedAgendamento(agendamento);
     setModalVisible(true);
@@ -115,11 +94,12 @@ export default function TodosAgendados() {
   );
 
   return (
+    <UbuntuFonte>
     <View style={TodosAgendadosCss.container}>
       <StatusBar style="light" translucent={true} />
       <View style={TodosAgendadosCss.nav}>
-        <TouchableOpacity onPress={() => {}}>
-          <Text style={TodosAgendadosCss.navItem}>Voltar</Text>
+        <TouchableOpacity onPress={() => console.log('Todos os agendados')}>
+          <Text style={TodosAgendadosCss.navItem}><Link href='/Agendados'>Voltar</Link></Text>
         </TouchableOpacity>
       </View>
 
@@ -130,12 +110,9 @@ export default function TodosAgendados() {
         onChangeText={setpesquisarItem}
       />
 
-      <FlatList
-        data={filteredAgendamentos}
-        renderItem={({ item }) => (
-          <AgendamentoItem item={item} onSchedule={handleSchedule} />
-        )}
-        keyExtractor={item => item.id}
+      <AgendamentosLista
+      data={filteredAgendamentos}
+      onSchedule={handleSchedule}
       />
       <AgendamentoModal
         visible={modalVisible}
@@ -147,5 +124,6 @@ export default function TodosAgendados() {
         onSaveStatus={handleSaveStatus}
       />
     </View>
+    </UbuntuFonte>
   );
 }

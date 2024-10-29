@@ -29,7 +29,6 @@ const AgendarCss = StyleSheet.create({
     paddingVertical: 4,
     fontSize: 16,
     fontFamily:'Ubuntu_400Regular',
-
   },
   dateText: {
     marginVertical: 16,
@@ -38,17 +37,15 @@ const AgendarCss = StyleSheet.create({
     fontFamily:'Ubuntu_700Bold',
     justifyContent:'center',
     textAlign:'center',
-
   },
   backButton: {
     backgroundColor: 'pink',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 15,
     alignItems: 'center',
     marginTop: 20,
-    alignSelf: 'center', 
+    alignSelf: 'center',
   },
-
   btnConfirma: {
     backgroundColor: '#33afff',
     padding: 15,
@@ -56,7 +53,7 @@ const AgendarCss = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-    width: '65%',
+    width: '45%',
     alignSelf: 'center',
   },
   btnConfrimaDetalhes: {
@@ -68,20 +65,12 @@ const AgendarCss = StyleSheet.create({
   btnDataHora:{
     backgroundColor: '#33afff',
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 20,
-    width: '90%',
+    width: '60%',
     alignSelf: 'center',
-
-  },
-  Img:{
-    opacity: 0.5,
-    width: 100,
-    height: 100,
-    marginBottom: 20,
-    borderRadius: 40,
   },
 
 });

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
+
 import FiltroCss from '../css/FiltroCss';
-// Mudei o nome do arquivo pois pretendo fazer mais um filtro
+
 interface FiltroProps {
   onSelectDay: (day: string | null) => void;
 }

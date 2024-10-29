@@ -1,5 +1,6 @@
 import { Link } from "expo-router";
 import { View, TouchableOpacity, Text } from "react-native";
+
 import AgendadosCss from "../css/AgendadosCss";
 
 const NavBar = () => {
