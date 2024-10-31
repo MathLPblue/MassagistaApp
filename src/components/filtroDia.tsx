@@ -10,52 +10,48 @@ interface FiltroProps {
 }
 
 const Filtro: React.FC<FiltroProps> = ({ onSelectDay }) => {
-  const [DiaSelecionado, setDiaSelecionado] = useState<number | null>(null);
+  const [DiaSelecionado, setDiaSelecionado] = useState<string | null>(null);
   const [dias, setDias] = useState<string[]>([]);
 
   useEffect(() => {
     const diasArray = [];
     moment.locale('pt-br');
-    //Decidi dixar apenas 7 dias mesmo...
     for (let i = 0; i < 7; i++) {
-      diasArray.push(moment().add(i, 'days').format('DD, ddd').toUpperCase());
-
+      diasArray.push(moment().add(i, 'days').format('DD-MM-YYYY, ddd').toUpperCase());
     }
     setDias(diasArray);
   }, []);
 
   const handlePress = (day: string) => {
-    const diaNum = Number(day.split(',')[0]);
-
-    if (DiaSelecionado === diaNum) {
-        setDiaSelecionado(null);
-        onSelectDay(null);
-      } else {
-        setDiaSelecionado(diaNum);
-        const diaFormatado = moment().date(diaNum).format('DD/MM/YYYY');
-        onSelectDay(diaFormatado);
-      }
+    const [diaCompleto] = day.split(','); 
+    if (DiaSelecionado === diaCompleto) {
+      setDiaSelecionado(null);
+      onSelectDay(null);
+    } else {
+      setDiaSelecionado(diaCompleto);
+      onSelectDay(moment(diaCompleto, 'DD-MM-YYYY').format('DD/MM/YYYY'));
+    }
   };
 
   return (
     <View>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={FiltroCss.container}>
         {dias.map((day, index) => {
-          const diaNum = Number(day.split(',')[0]);
+          const [diaCompleto, diaSemana] = day.split(',');
           return (
             <TouchableOpacity
               key={index}
               style={[
                 FiltroCss.CaixaDia,
-                DiaSelecionado === diaNum ? FiltroCss.DiaSelecionado : FiltroCss.padraoDia,
+                DiaSelecionado === diaCompleto ? FiltroCss.DiaSelecionado : FiltroCss.padraoDia,
               ]}
               onPress={() => handlePress(day)}
             >
-              <Text style={DiaSelecionado === diaNum ? FiltroCss.textoSelecionado : FiltroCss.text}>
-                {day.split(',')[0]}
+              <Text style={DiaSelecionado === diaCompleto ? FiltroCss.textoSelecionado : FiltroCss.text}>
+                {diaCompleto.split('-')[0]}
               </Text>
-              <Text style={DiaSelecionado === diaNum ? FiltroCss.textoSelecionado : FiltroCss.text}>
-                {day.split(',')[1]}
+              <Text style={DiaSelecionado === diaCompleto ? FiltroCss.textoSelecionado : FiltroCss.text}>
+                {diaSemana.trim()}
               </Text>
             </TouchableOpacity>
           );
