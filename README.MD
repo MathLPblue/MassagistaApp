@@ -1,7 +1,5 @@
 # App para Agendamento de Massagens
 
-Um aplicativo desenvolvido durante um projeto de extensão na estácio para a disciplina Programação em Dispositivos Móveis Android para um massagista. O aplicativo permite agendar massagens, oferecendo diferentes interfaces para clientes e massagistas.
-
 ## Descrição
 
 Este App para Agendamento de Massagens facilita o agendamento de sessões de massagem, proporcionando uma experiência intuitiva tanto para os clientes quanto para os massagistas. Os clientes podem visualizar a disponibilidade do massagista e agendar horários de acordo com sua conveniência, enquanto os massagistas podem gerenciar seus agendamentos de forma simples.
