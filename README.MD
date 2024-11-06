@@ -8,19 +8,9 @@ Este App para Agendamento de Massagens facilita o agendamento de sessões de mas
 
 - **Cadastro de Clientes**: Permite que novos clientes se cadastrem no sistema.
 - **Agendamento de Massagens**: Clientes podem selecionar horários disponíveis para agendar massagens.
-- **Gerenciamento de Agendamentos**: Massagistas podem visualizar e gerenciar suas sessões agendadas.
+- **Gerenciamento de Agendamentos**: Massagistas podem visualizar e gerenciar suas sessões agendadas.  
 
-## Tecnologias Utilizadas
-
-- **React Native**: Uma biblioteca para construir aplicativos móveis usando JavaScript e React, permitindo desenvolvimento multiplataforma para iOS e Android.
-
-- **Expo**: Um conjunto de ferramentas e serviços que facilitam o desenvolvimento e a construção de aplicativos React Native, oferecendo recursos como visualização instantânea e gerenciamento de dependências.
-
-- **TypeScript**: Uma linguagem que estende o JavaScript, adicionando tipagem estática, o que melhora a manutenção e a escalabilidade do código.
-
-- **Firebase**: Uma plataforma de desenvolvimento de aplicativos móveis e web que oferece serviços como autenticação, banco de dados em tempo real e hospedagem, facilitando a implementação de funcionalidades back-end.
-
-## Pré-requisitos
+## Pré-requisitos 
 
 - React Native 0.76+
 - Expo 51.0 +
