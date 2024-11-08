@@ -9,7 +9,7 @@ import { Link } from 'expo-router';
 import TodosAgendadosCss from '../css/TodosAgendadosCss';
 import AgendamentoModal from './AgendamentoModal';
 import AgendamentosLista from '../components/AgendamentoLista';
-import { Agendamento, StatusAgendamento } from '../types/AgendamentoTypes';
+import { Agendamento, StatusAgendamento } from '../interfaces/AgendamentoTypes';
 import UbuntuFonte from '../fonts/UbuntuFont';
 
 export default function TodosAgendados() {

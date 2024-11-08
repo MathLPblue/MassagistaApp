@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 
 import AgendadosCss from '../css/AgendadosCss';
-import { Agendamento, StatusAgendamento } from '../types/AgendamentoTypes';
+import { Agendamento, StatusAgendamento } from '../interfaces/AgendamentoTypes';
 
 interface AgendamentoModalProps {
   visible: boolean;

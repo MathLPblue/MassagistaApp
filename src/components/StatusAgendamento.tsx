@@ -2,7 +2,7 @@ import { View, Text } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 
 import AgendadosCss from "../css/AgendadosCss";
-import { StatusAgendamento } from "../types/AgendamentoTypes";
+import { StatusAgendamento } from "../interfaces/AgendamentoTypes";
 
 const StatusIndicador = (status: StatusAgendamento) => {
     const iconMap = {

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native';
 
 import AgendadosCss from '../css/AgendadosCss';
 import StatusIndicador from './StatusAgendamento';
-import { Agendamento } from '../types/AgendamentoTypes';
+import { Agendamento } from '../interfaces/AgendamentoTypes';
 
 interface AgendamentoItemProps {
   item: Agendamento;

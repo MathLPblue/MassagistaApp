@@ -11,7 +11,7 @@ import Filtro from '../components/filtroDia';
 import NavBar from '../components/NavBar';
 import AgendamentoModal from '../components/AgendamentoModal';
 import AgendamentosLista from '../components/AgendamentoLista';
-import { Agendamento, StatusAgendamento } from '../types/AgendamentoTypes';
+import { Agendamento, StatusAgendamento } from '../interfaces/AgendamentoTypes';
 import UbuntuFonte from '../fonts/UbuntuFont';
 
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { FlatList } from 'react-native';
 
 import AgendamentoItem from './AgendamentoItem';
-import { Agendamento } from '../types/AgendamentoTypes';
+import { Agendamento } from '../interfaces/AgendamentoTypes';
 
 interface AgendamentosListProps {
   data: Agendamento[];

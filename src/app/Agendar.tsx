@@ -21,8 +21,6 @@ export default function ScheduleScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const navigation = useNavigation();
-  //https://pt.stackoverflow.com/questions/293950/valida%C3%A7%C3%A3o-campo-telefone
-  //https://stackoverflow.com/questions/4338267/validate-phone-number-with-javascript
   const celularValido = (phone: string) => {
     const limpaCaracter = phone.replace(/\D/g, '');
     return limpaCaracter.length === 11;
